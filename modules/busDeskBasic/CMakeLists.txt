@@ -1,0 +1,1 @@
+add_library(ModuleBusDeskBasic BusDeskBasic.h BusDeskBasic.cpp)

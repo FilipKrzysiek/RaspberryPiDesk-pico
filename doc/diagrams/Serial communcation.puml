@@ -1,0 +1,71 @@
+@startuml
+'!theme vibrant
+!theme toy
+'!theme plain
+
+skinparam sequenceMessageAlign center
+
+App -> Microcontroller : Start transfer: ""uint8_t"" 255
+
+|||
+activate Microcontroller
+App <-- Microcontroller : Confirm start transfer: ""uint8_t"" 0
+
+alt Confirm start status is 0
+
+    note across: Communication with base module \n(keyboard and display)
+
+    App <-- Microcontroller : Keyboard buttons status: ""uint16_t""
+    |||
+
+    loop new character index [0 - 8] (or less)
+        App -> Microcontroller : New character index: ""uint8_t""
+        App -> Microcontroller : New character: ""uint8_t[5]""
+    end
+
+    App -> Microcontroller : End new character scope: ""uint8_t"" 255
+
+    |||
+
+    App -> Microcontroller : Text display line 1: ""char[20]""
+    App -> Microcontroller : Text display line 2: ""char[20]""
+    App -> Microcontroller : Text display line 3: ""char[20]""
+    App -> Microcontroller : Text display line 4: ""char[20]""
+
+    |||
+
+    note across:Get information about connected modules\nand communicate with them
+
+    loop until module id will be 0
+        App <-- Microcontroller : Module id: ""uint8_t""
+
+        alt 8 bit i/o module
+        |||
+        App -> Microcontroller : Buttons led status: ""uint8_t""
+        |||
+        App <- Microcontroller : Buttons status: ""uint8_t""
+
+        else 16 bit i/o module
+        |||
+        App -> Microcontroller : Buttons led status: ""uint16_t""
+        |||
+        App <- Microcontroller : Buttons status: ""uint16_t""
+
+        else Tram throttle module
+
+        else Gearbox module
+
+        end
+    end
+
+
+    |||
+    App <-- Microcontroller : End transfer: ""uint8_t"" 0
+
+    deactivate Microcontroller
+else Confirm status is different from 0
+    deactivate Microcontroller
+
+    note across: Try again to Start transfer
+end
+@enduml

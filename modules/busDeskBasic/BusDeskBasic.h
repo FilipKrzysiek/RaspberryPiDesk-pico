@@ -1,0 +1,14 @@
+//
+// Created by filip on 2/5/23.
+//
+
+#ifndef RASPBERRYPIDESK_PICO_BUSDESKBASIC_H
+#define RASPBERRYPIDESK_PICO_BUSDESKBASIC_H
+
+
+class BusDeskBasic {
+
+};
+
+
+#endif //RASPBERRYPIDESK_PICO_BUSDESKBASIC_H

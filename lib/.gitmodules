@@ -1,0 +1,3 @@
+[submodule "Raspberry-Pi-Pico-LCD"]
+	path = Raspberry-Pi-Pico-LCD
+	url = https://github.com/FilipCysEk/Raspberry-Pi-Pico-LCD.git
