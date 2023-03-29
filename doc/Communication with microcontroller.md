@@ -12,7 +12,7 @@ Komunikacja z mikrokontrolerem może odbywać się poprzez:
 
 ## Komunikacja używając portu serialowego
 
-![Communication by serial port](diagrams/Serial communcation.svg)
+![Communication by serial port](diagrams/Serial%20communcation.svg)
 
 
 
