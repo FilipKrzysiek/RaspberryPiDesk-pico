@@ -16,8 +16,6 @@ LcdHardwareI2c::LcdHardwareI2c(i2c_inst_t *i2c, uint8_t i2cAddress, uint pinI2C_
     i2c_init(i2c, 100 * 1000);
     gpio_set_function(PIN_I2C[0], GPIO_FUNC_I2C);
     gpio_set_function(PIN_I2C[1], GPIO_FUNC_I2C);
-    gpio_pull_up(PIN_I2C[0]);
-    gpio_pull_up(PIN_I2C[1]);
 }
 
 void LcdHardwareI2c::writeData(bool rs, bool rw, uint8_t data) {

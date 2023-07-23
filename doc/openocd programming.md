@@ -42,6 +42,12 @@ usbipd wsl detach --busid <busid>
 sudo openocd -f interface/picoprobe.cfg -f target/rp2040.cfg -c "program RaspberryPiDesk-pico.elf verify reset exit"
 ```
 
+Zaktualizowane
+
+```commandline
+sudo openocd -f interface/cmsis-dap.cfg -c "adapter speed 5000" -f target/rp2040.cfg -c "program i2c_bus_scan.elf verify reset exit"
+```
+
 ## Znane problemy
 
 Jeżeli openocd zwróci:

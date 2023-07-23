@@ -20,12 +20,7 @@ inline void initialize_i2c() {
     gpio_pull_up(MODULES_I2C_SDA);
     gpio_pull_up(MODULES_I2C_SCL);
 
-    i2c_init(LCD_I2C, 100 * 1000);
-
-    gpio_set_function(LCD_I2C_SDA, GPIO_FUNC_I2C);
-    gpio_set_function(LCD_I2C_SCL, GPIO_FUNC_I2C);
-    gpio_pull_up(LCD_I2C_SDA);
-    gpio_pull_up(LCD_I2C_SCL);
+    //TODO delete pull up when attach on board
 }
 
 inline void initializeGPIO() {
@@ -46,11 +41,14 @@ inline void initializeGPIO() {
 inline DashboardMain *initialize() {
     board_init();
     board_led_write(true);
-    auto *dBoard = new DashboardMain;
-    dBoard->writeLine(0, "Initializing Hello world!");
+
     initializeGPIO();
 
+    auto *dBoard = new DashboardMain;
+    dBoard->writeLine(0, "Initializing");
+
     initialize_i2c();
+
     return dBoard;
 }
 
