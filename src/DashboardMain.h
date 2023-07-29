@@ -76,6 +76,10 @@ public:
     inline void defineNewChar(unsigned short location, const uint8_t *dots) {
         lcd.defineChar(location, dots);
     }
+
+    void enableDisplayBacklight();
+
+    void disableDisplayBacklight();
 };
 
 

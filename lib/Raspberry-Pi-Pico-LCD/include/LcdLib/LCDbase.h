@@ -146,6 +146,16 @@ public:
      */
     void writeChar(uint8_t character);
 
+    /**
+     * Enable screen backlight (default enabled)
+     */
+    void enableBacklight();
+
+    /**
+     * Disable screen backlight (default enabled)
+     */
+    void disableBacklight();
+
 protected:
     unsigned short amountLines;
     unsigned short lineSize;

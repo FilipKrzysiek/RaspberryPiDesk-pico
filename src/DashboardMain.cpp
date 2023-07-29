@@ -108,3 +108,11 @@ void DashboardMain::writeOnDisplay(const std::string &line0, const std::string &
     lcd.writeLine(2, line2);
     lcd.writeLine(3, line3);
 }
+
+void DashboardMain::enableDisplayBacklight() {
+    lcd.enableBacklight();
+}
+
+void DashboardMain::disableDisplayBacklight() {
+    lcd.disableBacklight();
+}

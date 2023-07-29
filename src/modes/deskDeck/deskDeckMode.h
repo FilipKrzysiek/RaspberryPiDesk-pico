@@ -13,6 +13,8 @@ class DeskDeckMode {
     DashboardMain *dBoard;
     usbConnectionMode_t usbMode = USB_DESK;
     void (DeskDeckMode::*mode)() = nullptr;
+    uint32_t sleepTimer = 0;
+    bool screenSleep = false;
 
     void mainButtons();
 
@@ -27,6 +29,12 @@ class DeskDeckMode {
     void writeString1();
 
     void writeString2();
+
+    void checkConnected();
+
+    void wakeUpScreen();
+
+    void backToMainMode();
 
 public:
     explicit DeskDeckMode(DashboardMain *dBoard);

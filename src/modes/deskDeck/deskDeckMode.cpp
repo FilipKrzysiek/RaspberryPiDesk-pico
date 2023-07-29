@@ -20,8 +20,12 @@ usbConnectionMode_t DeskDeckMode::run() {
 }
 
 void DeskDeckMode::mainButtons() {
+    checkConnected();
     dBoard->readButtons();
     auto buttonsStatus = dBoard->getButtonsIbisStatusInt();
+    if (screenSleep && buttonsStatus != 0) {
+        wakeUpScreen();
+    }
 
     if (buttonsStatus == 0b1000000000000000) {
         mode = &DeskDeckMode::selectMode;
@@ -70,7 +74,7 @@ void DeskDeckMode::selectMode() {
         } else if (val == MODE_TESTING) {
             usbMode = USB_TEST_MODE;
         } else if (val == 0b0010000000000000) {
-            mode = &DeskDeckMode::mainButtons;
+            backToMainMode();
         } else {
             sleep_ms(10);
             continue;
@@ -98,7 +102,7 @@ void DeskDeckMode::insertingPredefinedText() {
         sleep_ms(50);
     }
 
-    mode = &DeskDeckMode::mainButtons;
+    backToMainMode();
     dBoard->clearDisplay();
 }
 
@@ -184,7 +188,7 @@ void DeskDeckMode::inventorMode() {
         sleep_ms(50);
     }
 
-    mode = &DeskDeckMode::mainButtons;
+    backToMainMode();
     dBoard->clearDisplay();
 }
 
@@ -212,4 +216,31 @@ void DeskDeckMode::inventorModeKeyActions(const uint &val) {
     } else {
         deskDeckReport.clearReport();
     }
+}
+
+void DeskDeckMode::checkConnected() {
+    if (tud_connected()) {
+        if (screenSleep) {
+            wakeUpScreen();
+        } else {
+            sleepTimer = board_millis();
+        }
+    } else if (!tud_connected() && !screenSleep) {
+        if (board_millis() - sleepTimer > 15000) {
+            screenSleep = true;
+            dBoard->disableDisplayBacklight();
+        }
+    }
+
+}
+
+void DeskDeckMode::wakeUpScreen() {
+    screenSleep = false;
+    dBoard->enableDisplayBacklight();
+    sleepTimer = board_millis();
+}
+
+void DeskDeckMode::backToMainMode() {
+    mode = &DeskDeckMode::mainButtons;
+    sleepTimer = board_millis();
 }

@@ -118,3 +118,11 @@ void LCDbase::defineChar(unsigned short location, const uint8_t *dots) {
 void LCDbase::writeChar(uint8_t character) {
     hardwareAccess->writeData(true, false, character);
 }
+
+void LCDbase::enableBacklight() {
+    hardwareAccess->enableBackLight();
+}
+
+void LCDbase::disableBacklight() {
+    hardwareAccess->disableBackLight();
+}
