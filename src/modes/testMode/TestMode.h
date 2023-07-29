@@ -18,11 +18,9 @@ class TestMode {
     uint readButtons = 0;
     bool flgRefreshDisplay = true;
 
-    void refreshDisplay();
-
-    void rDNoConnected();
-
     void refreshDisplayConnected();
+
+    void refreshConnectedModules();
 
     std::string getNameOfI2CModules(const uint &indx);
 

@@ -7,13 +7,15 @@
 [[noreturn]] TestMode::TestMode(DashboardMain *dBoard) : dBoard(dBoard) {
     dBoard->defineNewChar(CHAR_ADDR_AR_UP, CHAR_DOTS_AR_UP);
     dBoard->defineNewChar(CHAR_ADDR_AR_DOWN, CHAR_DOTS_AR_DOWN);
-    dBoard->writeOnDisplay("Test usbMode! A\b B\1 D~");
+    dBoard->writeOnDisplay("Test mode! A\b B\1 D~");
+
+    refreshConnectedModules();
+    refreshDisplayConnected();
 
     while (true) {
         auto oldSize = connectedModules.size();
-        connectedModules.clear();
-        connectedModules = i2c_fun::getConnectedDevices(MODULES_I2C);
-        connectedModules.push_back(IBIS_BUTTONS_I2C_FANTOM);
+
+        refreshConnectedModules();
 
         flgRefreshDisplay = oldSize != connectedModules.size();
 
@@ -21,19 +23,11 @@
         readButtons = dBoard->getButtonsIbisStatusInt();
         buttonAction();
         if (flgRefreshDisplay) {
-            refreshDisplay();
+            refreshDisplayConnected();
             flgRefreshDisplay = false;
         }
 
         sleep_ms(100);
-    }
-}
-
-void TestMode::refreshDisplay() {
-    if (connectedModules.empty()) {
-        rDNoConnected();
-    } else {
-        refreshDisplayConnected();
     }
 }
 
@@ -52,12 +46,6 @@ void TestMode::buttonAction() {
         }
         //TODO run class
     }
-}
-
-void TestMode::rDNoConnected() {
-    dBoard->writeLine(1, "No Connected devices!");
-    dBoard->writeLine(2, "");
-    dBoard->writeLine(3, "");
 }
 
 void TestMode::refreshDisplayConnected() {
@@ -80,7 +68,7 @@ void TestMode::refreshDisplayConnected() {
     }
 
     for (; i < 3; ++i) {
-        dBoard->writeLine(i, "");
+        dBoard->writeLine(i + 1, "");
     }
 }
 
@@ -130,4 +118,10 @@ std::string TestMode::getNameOfI2CModules(const uint &indx) {
             sleep_ms(100);
         }
     }
+}
+
+void TestMode::refreshConnectedModules() {
+    connectedModules.clear();
+    connectedModules = i2c_fun::getConnectedDevices(MODULES_I2C);
+    connectedModules.push_back(IBIS_BUTTONS_I2C_FANTOM);
 }
