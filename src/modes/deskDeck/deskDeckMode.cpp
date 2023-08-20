@@ -4,6 +4,7 @@
 
 #include <bsp/board.h>
 #include "deskDeckMode.h"
+#include "DashboardMenu.h"
 
 DeskDeckMode::DeskDeckMode(DashboardMain *dBoard) : dBoard(dBoard) {
     mode = &DeskDeckMode::mainButtons;
@@ -86,11 +87,33 @@ void DeskDeckMode::selectMode() {
 }
 
 void DeskDeckMode::insertingPredefinedText() {
-    dBoard->writeOnDisplay("Wstaw predefiniowane teksty:");
+    DashboardMenu menu(dBoard, "Wstaw predefiniowane teksty:", {"1 Email studencki",
+                                                                "2 Email pracowniczy",
+                                                                "3 Gmail smieci",
+                                                                "4 Gmail oficjalny",
+                                                                "5 -",
+                                                                "6 -",
+                                                                "7 -",
+                                                                "8 -",
+                                                                "9 -"});
 
+    auto timer = board_millis();
     unsigned short val = 0;
-    while (val == 0) {
-        dBoard->readButtons();
+    bool flgTitle1 = true;
+    while (val == 0 || val == 8 || val == 128) {
+        if (board_millis() - timer > 5000) {
+            if (flgTitle1) {
+                menu.updateTitle("Wybierz numer");
+            } else {
+                menu.updateTitle("Wstaw predefiniowane teksty:");
+            }
+
+            flgTitle1 = !flgTitle1;
+            timer = board_millis();
+        } else {
+            menu.updateMenu();
+        }
+
         val = dBoard->getButtonsIbisStatusInt();
 
         if (val == 0b0000000000000001) {
@@ -219,13 +242,13 @@ void DeskDeckMode::inventorModeKeyActions(const uint &val) {
 }
 
 void DeskDeckMode::checkConnected() {
-    if (tud_connected()) {
+    if (tud_connected() && !tud_suspended()) {
         if (screenSleep) {
             wakeUpScreen();
         } else {
             sleepTimer = board_millis();
         }
-    } else if (!tud_connected() && !screenSleep) {
+    } else if ((!tud_connected() || tud_suspended()) && !screenSleep) {
         if (board_millis() - sleepTimer > 15000) {
             screenSleep = true;
             dBoard->disableDisplayBacklight();

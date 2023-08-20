@@ -38,7 +38,7 @@ void TestMode::buttonAction() {
     } else if (readButtons == 128 && selectedIndex < connectedModules.size() - 1) {
         ++selectedIndex;
         flgRefreshDisplay = true;
-    } else if (readButtons == 32768 || readButtons == 2048 || readButtons == 34816) {
+    } else if (readButtons == 32768) {
         if (connectedModules[selectedIndex] == IBIS_BUTTONS_I2C_FANTOM) {
             ibisButtonsTM();
         } else {

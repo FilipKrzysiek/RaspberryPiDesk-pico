@@ -6,6 +6,7 @@
 #define RASPBERRYPIDESK_PICO_DESKDECKMODE_H
 
 #include "DashboardMain.h"
+#include "DashboardMenu.h"
 #include "usb/usbMode.hpp"
 
 
