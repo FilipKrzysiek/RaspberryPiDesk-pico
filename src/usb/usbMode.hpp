@@ -27,13 +27,15 @@ namespace usb_reports {
         uint8_t prevKeyCode[6] = { 0 };
         uint8_t modifier = 0;
 
-        uint8_t flgToSend = 0;
+        enum ToSendStatus {NOT_READY, SENDED, READY_TO_SEND};
 
-        inline void setKeyPressedBase(uint8_t &keycode) {
+        ToSendStatus flgToSend = NOT_READY;
+
+        inline void setKeyPressedBase(const uint8_t &keycode) {
             if (keycode != this->keyCode[0]) {
                 this->keyCode[0] = keycode;
                 modifier = 0;
-                flgToSend = 2;
+                flgToSend = READY_TO_SEND;
             }
         }
 
@@ -49,19 +51,25 @@ namespace usb_reports {
             sleep_ms(usbReportInterval_ms + 1);
         }
 
+        void setKeyPressedWithCtrl(uint8_t keycode) {
+            setKeyPressedBase(keycode);
+            modifier = KEYBOARD_MODIFIER_LEFTCTRL;
+            sleep_ms(usbReportInterval_ms + 1);
+        }
+
         void clearReport() {
             keyCode[0] = 0;
             modifier = 0;
         }
 
         void sendHidReport() {
-            if (flgToSend == 2 && keyCode[0] != 0) {
+            if (flgToSend == READY_TO_SEND && keyCode[0] != 0) {
                 tud_hid_keyboard_report(1, modifier, keyCode);
-                flgToSend = 1;
+                flgToSend = SENDED;
             } else {
-                if (flgToSend == 1) {
+                if (flgToSend == SENDED) {
                     tud_hid_keyboard_report(1, 0, nullptr);
-                    flgToSend = 0;
+                    flgToSend = NOT_READY;
                 }
             }
         }

@@ -24,12 +24,18 @@ private:
 
     void pullDownSlaves();
 
+    void buttonsStateTabToUint();
+
     LCDgeneric lcd = LCDgeneric(new LcdHardwareI2c(LCD_I2C, LCD_I2C_ADR,
                                                    LCD_I2C_SCL, LCD_I2C_SDA));
 
     //TODO Think to change it to uint (memory optimalization)
     bool buttonsIbisStatus[16] = {false, false, false, false, false, false, false, false, false, false, false, false,
                                   false, false, false, false};
+
+    uint16_t actualButtonStatus = 0;
+    uint16_t prevButtonStatus = 0;
+
 public:
     DashboardMain();
 
@@ -49,14 +55,14 @@ public:
      * Get states of buttons
      * @return buttons status as unsigned int
      */
-    [[nodiscard]] unsigned getButtonsIbisStatusInt() const;
+    [[nodiscard]] unsigned getButtonsIbisStatusInt() ;
 
     /**
      * Write line to display
      * @param lineNum number of lie indexed from 0
      * @param text text to write on display
      */
-    void writeLine(const unsigned short lineNum, const std::string &text);
+    void writeLine(unsigned short lineNum, const std::string &text);
 
     /**
      * Write text to all lines display
@@ -80,6 +86,8 @@ public:
     void enableDisplayBacklight();
 
     void disableDisplayBacklight();
+
+    static int64_t buzzerStop(alarm_id_t id, void *user_data);
 };
 
 

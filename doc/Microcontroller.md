@@ -9,17 +9,17 @@ In this part describes connections with microcontroller and device construction.
 
 ## Communication with custom modules
 
-Custom modules was connected to base using RJ45 port and using i2c protocol.
+Custom modules was connected to base using 8P8C (RJ45) port and using i2c protocol.
 Cable description:
 
 1. SDA
 2. SCL
-3. +5V
+3. EMPTY
 4. +3.3V
-5. GND
+5. +5V
 6. EMPTY
-7. EMPTY
-8. EMPTY
+7. GND
+8. GND
 
 &nbsp;
 

@@ -31,11 +31,11 @@ inline void initializeGPIO() {
     pinsMask = pinsMask | (1 << GP_KYB_SLAVE_1);
     pinsMask = pinsMask | (1 << GP_KYB_SLAVE_2);
     pinsMask = pinsMask | (1 << GP_KYB_SLAVE_3);
-    pinsMask = pinsMask | (1 << 16);
+    pinsMask = pinsMask | (1 << GP_BUZZER);
     gpio_init_mask(pinsMask);
 
-    gpio_set_dir(16, GPIO_OUT);
-    gpio_put(16, true);
+    gpio_set_dir(GP_BUZZER, GPIO_OUT);
+    gpio_put(GP_BUZZER, false);
 }
 
 inline DashboardMain *initialize() {

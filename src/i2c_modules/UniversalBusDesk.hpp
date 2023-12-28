@@ -22,12 +22,12 @@ public:
     /**
      * Size of data send to device (in bytes)
      */
-    static const size_t D_SIZE_TD = 1;
+    static constexpr size_t D_SIZE_TD = 1;
 
     /**
      * Size of data receive from device (in bytes)
      */
-    static const size_t D_SIZE_FD = 2;
+    static constexpr size_t D_SIZE_FD = 2;
 
     explicit UniversalBusDesk();
 

@@ -8,6 +8,9 @@
 #include <map>
 #include "pico/stdlib.h"
 
+#define GP_BUZZER 17
+#define GP_BUZZER_TIME 25
+
 #define MODE_SERIAl 1
 #define MODE_JOYSTICK 2
 #define MODE_GENERIC 4
@@ -61,6 +64,24 @@ const uint8_t CHAR_DOTS_AR_DOWN[]{
         0b01110,
         0b00100};
 
+// -----------------------------------------------
+
+constexpr uint16_t BASE_KYB_1 = 0b0000000000000001;
+constexpr uint16_t BASE_KYB_2 = 0b0000000000000010;
+constexpr uint16_t BASE_KYB_3 = 0b0000000000000100;
+constexpr uint16_t BASE_KYB_A = 0b0000000000001000;
+constexpr uint16_t BASE_KYB_4 = 0b0000000000010000;
+constexpr uint16_t BASE_KYB_5 = 0b0000000000100000;
+constexpr uint16_t BASE_KYB_6 = 0b0000000001000000;
+constexpr uint16_t BASE_KYB_B = 0b0000000010000000;
+constexpr uint16_t BASE_KYB_7 = 0b0000000100000000;
+constexpr uint16_t BASE_KYB_8 = 0b0000001000000000;
+constexpr uint16_t BASE_KYB_9 = 0b0000010000000000;
+constexpr uint16_t BASE_KYB_C = 0b0000100000000000;
+constexpr uint16_t BASE_KYB_STAR = 0b0001000000000000;
+constexpr uint16_t BASE_KYB_0 = 0b0010000000000000;
+constexpr uint16_t BASE_KYB_HASH = 0b0100000000000000;
+constexpr uint16_t BASE_KYB_D = 0b1000000000000000;
 
 //static_assert(LCD_I2C != MODULES_I2C, "LCD and modules should not use the same i2c line");
 //TODO static assert for checking LCD_I2C != MODULES_I2C

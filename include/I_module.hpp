@@ -16,6 +16,8 @@ protected:
     const uint8_t addr;
 
 public:
+    virtual ~I_Module() = default;
+
     explicit I_Module(uint8_t addr): addr(addr) {}
 
     /**

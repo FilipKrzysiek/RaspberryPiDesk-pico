@@ -14,6 +14,7 @@ void usb_task() {
 
     while (usbCMode != USB_NONE) {
         tud_task();
+        tight_loop_contents();
 
         if (board_millis() - start_ms < usbReportInterval_ms) {
             sleep_ms(1);

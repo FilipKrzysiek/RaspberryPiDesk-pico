@@ -27,6 +27,8 @@ class DeskDeckMode {
 
     void inventorModeKeyActions(const uint &val);
 
+    void omsiKeyboardMode();
+
     void writeString1();
 
     void writeString2();

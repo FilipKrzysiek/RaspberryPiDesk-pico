@@ -4,6 +4,9 @@
 
 #include <bsp/board.h>
 #include "deskDeckMode.h"
+
+#include <cmath>
+
 #include "DashboardMenu.h"
 
 DeskDeckMode::DeskDeckMode(DashboardMain *dBoard) : dBoard(dBoard) {
@@ -28,31 +31,33 @@ void DeskDeckMode::mainButtons() {
         wakeUpScreen();
     }
 
-    if (buttonsStatus == 0b1000000000000000) {
+    if (buttonsStatus == BASE_KYB_D) {
         mode = &DeskDeckMode::selectMode;
-    } else if (buttonsStatus == 0b0000000000001000) {
+    } else if (buttonsStatus == BASE_KYB_A) {
         mode = &DeskDeckMode::insertingPredefinedText;
-    } else if (buttonsStatus == 0b0000000010000000) {
+    } else if (buttonsStatus == BASE_KYB_B) {
         mode = &DeskDeckMode::inventorMode;
-    } else if (buttonsStatus == 0b0000000000000001) {
+    } else if (buttonsStatus == BASE_KYB_C) {
+        mode = &DeskDeckMode::omsiKeyboardMode;
+    } else if (buttonsStatus == BASE_KYB_1) {
         deskDeckReport.setKeyPressed(HID_KEY_F13);
-    } else if (buttonsStatus == 0b0000000000000010) {
+    } else if (buttonsStatus == BASE_KYB_2) {
         deskDeckReport.setKeyPressed(HID_KEY_F14);
-    } else if (buttonsStatus == 0b0000000000000100) {
+    } else if (buttonsStatus == BASE_KYB_3) {
         deskDeckReport.setKeyPressed(HID_KEY_F15);
-    } else if (buttonsStatus == 0b0000000000010000) {
+    } else if (buttonsStatus == BASE_KYB_4) {
         deskDeckReport.setKeyPressed(HID_KEY_F16);
-    } else if (buttonsStatus == 0b0000000000100000) {
+    } else if (buttonsStatus == BASE_KYB_5) {
         deskDeckReport.setKeyPressed(HID_KEY_F17);
-    } else if (buttonsStatus == 0b0000000001000000) {
+    } else if (buttonsStatus == BASE_KYB_6) {
         deskDeckReport.setKeyPressed(HID_KEY_F18);
-    } else if (buttonsStatus == 0b0000000100000000) {
+    } else if (buttonsStatus == BASE_KYB_7) {
         deskDeckReport.setKeyPressed(HID_KEY_F19);
-    } else if (buttonsStatus == 0b0000001000000000) {
+    } else if (buttonsStatus == BASE_KYB_8) {
         deskDeckReport.setKeyPressed(HID_KEY_F20);
-    } else if (buttonsStatus == 0b0000010000000000) {
+    } else if (buttonsStatus == BASE_KYB_9) {
         deskDeckReport.setKeyPressed(HID_KEY_F21);
-    } else if (buttonsStatus == 0b0010000000000000) {
+    } else if (buttonsStatus == BASE_KYB_0) {
         deskDeckReport.setKeyPressed(HID_KEY_F22);
     } else {
         deskDeckReport.clearReport();
@@ -116,9 +121,9 @@ void DeskDeckMode::insertingPredefinedText() {
 
         val = dBoard->getButtonsIbisStatusInt();
 
-        if (val == 0b0000000000000001) {
+        if (val == BASE_KYB_1) {
             writeString1();
-        } else if (val == 0b0000000000000010) {
+        } else if (val == BASE_KYB_2) {
             writeString2();
         }
 
@@ -203,7 +208,7 @@ void DeskDeckMode::inventorMode() {
     dBoard->writeOnDisplay("Inventor mode");
 
     uint val = 0;
-    while (val != 8192) {
+    while (val != BASE_KYB_D) {
         dBoard->readButtons();
         val = dBoard->getButtonsIbisStatusInt();
 
@@ -216,29 +221,70 @@ void DeskDeckMode::inventorMode() {
 }
 
 void DeskDeckMode::inventorModeKeyActions(const uint &val) {
-    if (val == 0b0000000000000001) {
+    if (val == BASE_KYB_1) {
         deskDeckReport.setKeyPressed(HID_KEY_HOME);
-    } else if (val == 0b0000000000000010) {
+    } else if (val == BASE_KYB_2) {
         deskDeckReport.setKeyPressed(HID_KEY_F14);
-    } else if (val == 0b0000000000000100) {
+    } else if (val == BASE_KYB_3) {
         deskDeckReport.setKeyPressed(HID_KEY_F15);
-    } else if (val == 0b0000000000010000) {
+    } else if (val == BASE_KYB_4) {
         deskDeckReport.setKeyPressed(HID_KEY_F16);
-    } else if (val == 0b0000000000100000) {
+    } else if (val == BASE_KYB_5) {
         deskDeckReport.setKeyPressed(HID_KEY_F17);
-    } else if (val == 0b0000000001000000) {
+    } else if (val == BASE_KYB_6) {
         deskDeckReport.setKeyPressed(HID_KEY_F18);
-    } else if (val == 0b0000000100000000) {
+    } else if (val == BASE_KYB_7) {
         deskDeckReport.setKeyPressed(HID_KEY_F19);
-    } else if (val == 0b0000001000000000) {
+    } else if (val == BASE_KYB_8) {
         deskDeckReport.setKeyPressed(HID_KEY_F20);
-    } else if (val == 0b0000010000000000) {
+    } else if (val == BASE_KYB_9) {
         deskDeckReport.setKeyPressed(HID_KEY_F21);
-    } else if (val == 0b0010000000000000) {
+    } else if (val == BASE_KYB_0) {
         deskDeckReport.setKeyPressed(HID_KEY_F22);
     } else {
         deskDeckReport.clearReport();
     }
+}
+
+void DeskDeckMode::omsiKeyboardMode() {
+    dBoard->writeOnDisplay("OMSI keyboard mode");
+
+    uint val = 0;
+    while (val != BASE_KYB_D) {
+        dBoard->readButtons();
+        val = dBoard->getButtonsIbisStatusInt();
+
+        uint8_t col = tu_log2(val) % 4;
+        uint8_t row = tu_log2(val)/4;
+
+        if (val != 0) {
+            if (col == 3) {
+                if (val == BASE_KYB_A) {
+                    deskDeckReport.setKeyPressedWithCtrl(HID_KEY_KEYPAD_DIVIDE);
+                } else if (val == BASE_KYB_B) {
+                    deskDeckReport.setKeyPressedWithCtrl(HID_KEY_KEYPAD_MULTIPLY);
+                } else if (val == BASE_KYB_C) {
+                    deskDeckReport.setKeyPressedWithCtrl(HID_KEY_KEYPAD_SUBTRACT);
+                }
+            } else if (row == 3) {
+                if (val == BASE_KYB_0) {
+                    deskDeckReport.setKeyPressedWithCtrl(HID_KEY_KEYPAD_0);
+                } else if (val == BASE_KYB_STAR) {
+                    deskDeckReport.setKeyPressedWithCtrl(HID_KEY_KEYPAD_DECIMAL);
+                } else if (val == BASE_KYB_HASH) {
+                    deskDeckReport.setKeyPressedWithCtrl(HID_KEY_KEYPAD_ENTER);
+                }
+            } else {
+                deskDeckReport.setKeyPressedWithCtrl(HID_KEY_KEYPAD_1 + col + 3 * row);
+            }
+        } else {
+            deskDeckReport.clearReport();
+        }
+        sleep_ms(50);
+    }
+
+    backToMainMode();
+    dBoard->clearDisplay();
 }
 
 void DeskDeckMode::checkConnected() {
