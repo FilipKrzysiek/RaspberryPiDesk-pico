@@ -39,8 +39,9 @@ constexpr i2c_inst_t *MODULES_I2C = i2c1;
 
 const uint IBIS_BUTTONS_I2C_FANTOM = 0x00;
 
-constexpr uint MODULES_LIST[] = {0x21, 0x00};
+constexpr uint MODULES_LIST[] = {0x21, 0x48, 0x00};
 const std::map<uint, const char *> MODULES_NAME_LIST = {{0x21,                    "Bus desk basic"},
+                                                        {0x48,                    "Adjuster"},
                                                         {IBIS_BUTTONS_I2C_FANTOM, "IBIS.md buttons"}};
 constexpr uint GP_KYB_SLAVE[] = {GP_KYB_SLAVE_0, GP_KYB_SLAVE_1, GP_KYB_SLAVE_2, GP_KYB_SLAVE_3};
 

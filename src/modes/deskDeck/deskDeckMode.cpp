@@ -8,6 +8,7 @@
 #include <cmath>
 
 #include "DashboardMenu.h"
+#include "constFunctions.h"
 
 DeskDeckMode::DeskDeckMode(DashboardMain *dBoard) : dBoard(dBoard) {
     mode = &DeskDeckMode::mainButtons;
@@ -92,15 +93,15 @@ void DeskDeckMode::selectMode() {
 }
 
 void DeskDeckMode::insertingPredefinedText() {
-    DashboardMenu menu(dBoard, "Wstaw predefiniowane teksty:", {"1 Email studencki",
-                                                                "2 Email pracowniczy",
-                                                                "3 Gmail smieci",
-                                                                "4 Gmail oficjalny",
-                                                                "5 -",
-                                                                "6 -",
-                                                                "7 -",
-                                                                "8 -",
-                                                                "9 -"});
+    DashboardMenu menu(dBoard, "Wstaw predefiniowane teksty:", {"1 " + predefiniedTextDsc[0],
+                                                                "2 " + predefiniedTextDsc[1],
+                                                                "3 " + predefiniedTextDsc[2],
+                                                                "4 " + predefiniedTextDsc[3],
+                                                                "5 " + predefiniedTextDsc[4],
+                                                                "6 " + predefiniedTextDsc[5],
+                                                                "7 " + predefiniedTextDsc[6],
+                                                                "8 " + predefiniedTextDsc[7],
+                                                                "9 " + predefiniedTextDsc[8]});
 
     auto timer = board_millis();
     unsigned short val = 0;
@@ -122,9 +123,23 @@ void DeskDeckMode::insertingPredefinedText() {
         val = dBoard->getButtonsIbisStatusInt();
 
         if (val == BASE_KYB_1) {
-            writeString1();
+            writeString(predefiniedText[0]);
         } else if (val == BASE_KYB_2) {
-            writeString2();
+            writeString(predefiniedText[1]);
+        } else if (val == BASE_KYB_3) {
+            writeString(predefiniedText[2]);
+        } else if (val == BASE_KYB_4) {
+            writeString(predefiniedText[3]);
+        } else if (val == BASE_KYB_5) {
+            writeString(predefiniedText[4]);
+        } else if (val == BASE_KYB_6) {
+            writeString(predefiniedText[5]);
+        } else if (val == BASE_KYB_7) {
+            writeString(predefiniedText[6]);
+        } else if (val == BASE_KYB_8) {
+            writeString(predefiniedText[7]);
+        } else if (val == BASE_KYB_9) {
+            writeString(predefiniedText[8]);
         }
 
         sleep_ms(50);
@@ -132,76 +147,6 @@ void DeskDeckMode::insertingPredefinedText() {
 
     backToMainMode();
     dBoard->clearDisplay();
-}
-
-void DeskDeckMode::writeString1() {
-    deskDeckReport.setKeyPressed(HID_KEY_K);
-    deskDeckReport.setKeyPressed(HID_KEY_R);
-    deskDeckReport.setKeyPressed(HID_KEY_Z);
-    deskDeckReport.setKeyPressed(HID_KEY_Y);
-    deskDeckReport.setKeyPressed(HID_KEY_S);
-    deskDeckReport.setKeyPressed(HID_KEY_Z);
-    deskDeckReport.setKeyPressed(HID_KEY_T);
-    deskDeckReport.setKeyPressed(HID_KEY_O);
-    deskDeckReport.setKeyPressed(HID_KEY_F);
-    deskDeckReport.setKeyPressed(HID_KEY_PERIOD);
-    deskDeckReport.setKeyPressed(HID_KEY_S);
-    deskDeckReport.setKeyPressed(HID_KEY_W);
-    deskDeckReport.setKeyPressed(HID_KEY_A);
-    deskDeckReport.setKeyPressed(HID_KEY_L);
-    deskDeckReport.setKeyPressed(HID_KEY_D);
-    deskDeckReport.setKeyPressed(HID_KEY_E);
-    deskDeckReport.setKeyPressed(HID_KEY_K);
-    deskDeckReport.setKeyPressedWithShift(HID_KEY_2);
-    deskDeckReport.setKeyPressed(HID_KEY_S);
-    deskDeckReport.setKeyPressed(HID_KEY_T);
-    deskDeckReport.setKeyPressed(HID_KEY_U);
-    deskDeckReport.setKeyPressed(HID_KEY_D);
-    deskDeckReport.setKeyPressed(HID_KEY_E);
-    deskDeckReport.setKeyPressed(HID_KEY_N);
-    deskDeckReport.setKeyPressed(HID_KEY_T);
-    deskDeckReport.setKeyPressed(HID_KEY_PERIOD);
-    deskDeckReport.setKeyPressed(HID_KEY_P);
-    deskDeckReport.setKeyPressed(HID_KEY_K);
-    deskDeckReport.setKeyPressed(HID_KEY_PERIOD);
-    deskDeckReport.setKeyPressed(HID_KEY_E);
-    deskDeckReport.setKeyPressed(HID_KEY_D);
-    deskDeckReport.setKeyPressed(HID_KEY_U);
-    deskDeckReport.setKeyPressed(HID_KEY_PERIOD);
-    deskDeckReport.setKeyPressed(HID_KEY_P);
-    deskDeckReport.setKeyPressed(HID_KEY_L);
-    deskDeckReport.clearReport();
-}
-
-void DeskDeckMode::writeString2() {
-    deskDeckReport.setKeyPressed(HID_KEY_K);
-    deskDeckReport.setKeyPressed(HID_KEY_R);
-    deskDeckReport.setKeyPressed(HID_KEY_Z);
-    deskDeckReport.setKeyPressed(HID_KEY_Y);
-    deskDeckReport.setKeyPressed(HID_KEY_S);
-    deskDeckReport.setKeyPressed(HID_KEY_Z);
-    deskDeckReport.setKeyPressed(HID_KEY_T);
-    deskDeckReport.setKeyPressed(HID_KEY_O);
-    deskDeckReport.setKeyPressed(HID_KEY_F);
-    deskDeckReport.setKeyPressed(HID_KEY_PERIOD);
-    deskDeckReport.setKeyPressed(HID_KEY_S);
-    deskDeckReport.setKeyPressed(HID_KEY_W);
-    deskDeckReport.setKeyPressed(HID_KEY_A);
-    deskDeckReport.setKeyPressed(HID_KEY_L);
-    deskDeckReport.setKeyPressed(HID_KEY_D);
-    deskDeckReport.setKeyPressed(HID_KEY_E);
-    deskDeckReport.setKeyPressed(HID_KEY_K);
-    deskDeckReport.setKeyPressedWithShift(HID_KEY_2);
-    deskDeckReport.setKeyPressed(HID_KEY_P);
-    deskDeckReport.setKeyPressed(HID_KEY_K);
-    deskDeckReport.setKeyPressed(HID_KEY_PERIOD);
-    deskDeckReport.setKeyPressed(HID_KEY_E);
-    deskDeckReport.setKeyPressed(HID_KEY_D);
-    deskDeckReport.setKeyPressed(HID_KEY_U);
-    deskDeckReport.setKeyPressed(HID_KEY_PERIOD);
-    deskDeckReport.setKeyPressed(HID_KEY_P);
-    deskDeckReport.setKeyPressed(HID_KEY_L);
-    deskDeckReport.clearReport();
 }
 
 void DeskDeckMode::inventorMode() {
@@ -247,44 +192,56 @@ void DeskDeckMode::inventorModeKeyActions(const uint &val) {
 }
 
 void DeskDeckMode::omsiKeyboardMode() {
-    dBoard->writeOnDisplay("OMSI keyboard mode");
+  dBoard->writeOnDisplay("OMSI keyboard mode");
 
-    uint val = 0;
-    while (val != BASE_KYB_D) {
-        dBoard->readButtons();
-        val = dBoard->getButtonsIbisStatusInt();
+  uint val = 0;
+  while (val != BASE_KYB_D) {
+    dBoard->readButtons();
+    val = dBoard->getButtonsIbisStatusInt();
 
-        uint8_t col = tu_log2(val) % 4;
-        uint8_t row = tu_log2(val)/4;
+    uint8_t col = tu_log2(val) % 4;
+    uint8_t row = tu_log2(val) / 4;
 
-        if (val != 0) {
-            if (col == 3) {
-                if (val == BASE_KYB_A) {
-                    deskDeckReport.setKeyPressedWithCtrl(HID_KEY_KEYPAD_DIVIDE);
-                } else if (val == BASE_KYB_B) {
-                    deskDeckReport.setKeyPressedWithCtrl(HID_KEY_KEYPAD_MULTIPLY);
-                } else if (val == BASE_KYB_C) {
-                    deskDeckReport.setKeyPressedWithCtrl(HID_KEY_KEYPAD_SUBTRACT);
-                }
-            } else if (row == 3) {
-                if (val == BASE_KYB_0) {
-                    deskDeckReport.setKeyPressedWithCtrl(HID_KEY_KEYPAD_0);
-                } else if (val == BASE_KYB_STAR) {
-                    deskDeckReport.setKeyPressedWithCtrl(HID_KEY_KEYPAD_DECIMAL);
-                } else if (val == BASE_KYB_HASH) {
-                    deskDeckReport.setKeyPressedWithCtrl(HID_KEY_KEYPAD_ENTER);
-                }
-            } else {
-                deskDeckReport.setKeyPressedWithCtrl(HID_KEY_KEYPAD_1 + col + 3 * row);
-            }
-        } else {
-            deskDeckReport.clearReport();
+    if (val != 0) {
+      if (col == 3) {
+        if (val == BASE_KYB_A) {
+          deskDeckReport.setKeyPressedWithCtrl(HID_KEY_KEYPAD_DIVIDE);
+        } else if (val == BASE_KYB_B) {
+          deskDeckReport.setKeyPressedWithCtrl(HID_KEY_KEYPAD_MULTIPLY);
+        } else if (val == BASE_KYB_C) {
+          deskDeckReport.setKeyPressedWithCtrl(HID_KEY_KEYPAD_SUBTRACT);
         }
-        sleep_ms(50);
+      } else if (row == 3) {
+        if (val == BASE_KYB_0) {
+          deskDeckReport.setKeyPressedWithCtrl(HID_KEY_KEYPAD_0);
+        } else if (val == BASE_KYB_STAR) {
+          deskDeckReport.setKeyPressedWithCtrl(HID_KEY_KEYPAD_DECIMAL);
+        } else if (val == BASE_KYB_HASH) {
+          deskDeckReport.setKeyPressedWithCtrl(HID_KEY_KEYPAD_ENTER);
+        }
+      } else {
+        deskDeckReport.setKeyPressedWithCtrl(HID_KEY_KEYPAD_1 + col + 3 * row);
+      }
+    } else {
+      deskDeckReport.clearReport();
+    }
+    sleep_ms(50);
+  }
+
+  backToMainMode();
+  dBoard->clearDisplay();
+}
+void DeskDeckMode::writeString(const string &text) {
+    for (auto ch : text) {
+        auto codes = getKeyCodeFromChar(ch);
+        if (codes.first != 0) {
+            deskDeckReport.setKeyPressedWithShift(codes.second);
+        } else {
+            deskDeckReport.setKeyPressed(codes.second);
+        }
     }
 
-    backToMainMode();
-    dBoard->clearDisplay();
+    deskDeckReport.clearReport();
 }
 
 void DeskDeckMode::checkConnected() {

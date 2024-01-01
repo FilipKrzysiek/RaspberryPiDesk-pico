@@ -35,5 +35,8 @@ I_Module *i2c_fun::getModule(uint addr, DashboardMain *dBoard) {
     if (addr == 0x21)
         return new UniversalBusDesk();
 
+    if (addr == 0x48)
+        return new Adjuster();
+
     return nullptr;
 }

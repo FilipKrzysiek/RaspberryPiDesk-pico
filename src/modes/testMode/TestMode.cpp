@@ -108,7 +108,7 @@ std::string TestMode::getNameOfI2CModules(const uint &indx) {
 
 [[noreturn]] void TestMode::moduleTM() {
     I_Module *module = i2c_fun::getModule(connectedModules[selectedIndex], dBoard);
-    if (!module->initialize()) {
+    if (module == nullptr || !module->initialize()) {
         dBoard->writeOnDisplay("ERROR ON CONNECTING!");
     } else {
         dBoard->writeOnDisplay("TM: " + std::string(MODULES_NAME_LIST.at(connectedModules[selectedIndex])));

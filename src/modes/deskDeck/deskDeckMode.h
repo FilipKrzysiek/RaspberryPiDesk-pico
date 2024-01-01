@@ -8,6 +8,7 @@
 #include "DashboardMain.h"
 #include "DashboardMenu.h"
 #include "usb/usbMode.hpp"
+#include "declarations.h"
 
 
 class DeskDeckMode {
@@ -29,9 +30,7 @@ class DeskDeckMode {
 
     void omsiKeyboardMode();
 
-    void writeString1();
-
-    void writeString2();
+    void writeString(const string &text);
 
     void checkConnected();
 

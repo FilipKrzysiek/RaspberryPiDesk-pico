@@ -11,6 +11,7 @@
 #include <string>
 #include "declarations.hpp"
 #include "i2c_modules/UniversalBusDesk.hpp"
+#include "i2c_modules/adjuster.h"
 
 namespace i2c_fun {
     using namespace std;
