@@ -25,7 +25,13 @@ add_executable(RaspberryPiDesk-pico
         src/modes/testMode/TestMode.cpp src/modes/testMode/TestMode.h
         src/i2c_modules/UniversalBusDesk.cpp src/i2c_modules/UniversalBusDesk.hpp
         src/modes/deskDeck/deskDeckMode.cpp src/modes/deskDeck/deskDeckMode.h
-        src/usb/usbFunctions.cpp src/usb/usbFunctions.h src/DashboardMenu.cpp src/DashboardMenu.h)
+        src/usb/usbFunctions.cpp src/usb/usbFunctions.h src/DashboardMenu.cpp src/DashboardMenu.h
+        src/i2c_modules/adjuster.cpp
+        src/i2c_modules/adjuster.h
+        src/modes/gamePadMode/GamePadMode.cpp
+        src/modes/gamePadMode/GamePadMode.h
+        src/constFunctions.h
+        src/modes/deskDeck/declarations.h)
 
 target_include_directories(RaspberryPiDesk-pico PUBLIC src include)
 
