@@ -98,11 +98,16 @@ std::string TestMode::getNameOfI2CModules(const uint &indx) {
 
 [[noreturn]] void TestMode::ibisButtonsTM() {
     dBoard->writeOnDisplay("IBIS.md buttons Test Mode");
+    bool ledState = false;
+
     while (true) {
         dBoard->readButtons();
         dBoard->writeLine(1, std::bitset<16>(dBoard->getButtonsIbisStatusInt()).to_string());
 
         sleep_ms(100);
+
+        board_led_write(ledState);
+        ledState = !ledState;
     }
 }
 
@@ -112,8 +117,14 @@ std::string TestMode::getNameOfI2CModules(const uint &indx) {
         dBoard->writeOnDisplay("ERROR ON CONNECTING!");
     } else {
         dBoard->writeOnDisplay("TM: " + std::string(MODULES_NAME_LIST.at(connectedModules[selectedIndex])));
+        sleep_ms(1000);
+
+        bool ledState = true;
 
         while(true) {
+            board_led_write(ledState);
+            ledState = !ledState;
+
             module->testMode(dBoard);
             sleep_ms(100);
         }

@@ -12,14 +12,17 @@ In this part describes connections with microcontroller and device construction.
 Custom modules was connected to base using 8P8C (RJ45) port and using i2c protocol.
 Cable description:
 
-1. SDA
-2. SCL
-3. EMPTY
-4. +3.3V
-5. +5V
-6. EMPTY
-7. GND
-8. GND
+| PIN number |    Color     | Connection |
+|:----------:|:------------:|:----------:|
+|     1.     | green-white  |    SDA     |
+|     2.     |    green     |    SCL     |
+|     3.     | orange-white |    GND     |
+|     4.     |    orange    |    GND     |
+|     5.     |  blue-white  |   +3.3V    |
+|     6.     |     blue     |   +3.3V    |
+|     7.     | brown-white  |    +5V     |
+|     8.     |    brown     |    +5V     |
+
 
 &nbsp;
 
@@ -37,16 +40,16 @@ Cable description:
 |           |     **GND**     |  8  |                    | 33  |                 |           |
 | KYB_MSTR0 |       GP6       |  9  |                    | 32  |                 |           |
 | KYB_MSTR1 |       GP7       | 10  |                    | 31  |                 |           |
-|           |                 | 11  |                    | 30  |                 |           |
-|           |                 | 12  |                    | 29  |                 |           |
-|           |                 | 13  |                    | 28  |                 |           |
-|           |                 | 14  |                    | 27  |                 |           |
-|           |                 | 15  |                    | 26  |                 |           |
-|           |                 | 16  |                    | 25  |                 |           |
-|           |                 | 17  |                    | 24  |                 |           |
-|           |                 | 18  |                    | 23  |                 |           |
-|           |                 | 19  |                    | 22  |                 |           |
-|           |                 | 20  |                    | 21  |                 |           |
+|           |       GP8       | 11  |                    | 30  |                 |           |
+|           |       GP9       | 12  |                    | 29  |                 |           |
+|           |     **GND**     | 13  |                    | 28  |                 |           |
+|           |      GP10       | 14  |                    | 27  |                 |           |
+|           |      GP11       | 15  |                    | 26  |                 |           |
+|           |      GP12       | 16  |                    | 25  |                 |           |
+|           |      GP13       | 17  |                    | 24  |                 |           |
+|           |     **GND**     | 18  |                    | 23  |                 |           |
+|  Modules  | GP14, I2C1, SDA | 19  |                    | 22  |      GP17       |  Buzzer   |
+|  Modules  | GP15, I2C1, SCL | 20  |                    | 21  |      GP16       |           |
 
 &nbsp;
 

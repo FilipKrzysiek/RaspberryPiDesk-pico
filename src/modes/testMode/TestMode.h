@@ -9,6 +9,7 @@
 #include <bitset>
 #include "DashboardMain.h"
 #include "i2cFunctions.h"
+#include "bsp/board.h"
 #include "I_module.hpp"
 
 class TestMode {

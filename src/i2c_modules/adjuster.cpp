@@ -3,6 +3,19 @@
 //
 
 #include "adjuster.h"
+
+void Adjuster::processRawValue() {
+  uint16_t tmp = adjusterLevelRawT[1] + adjusterLevelRawT[2] + adjusterLevelRawT[3] + adjusterLevelRawT[4];
+  adjusterLevelRaw = tmp == 0 ? 0 : tmp / 4;
+
+  //TODO add more complex calculations
+  if (adjusterLevelRaw > 118) {
+    adjusterLevelScaled = 127.5 / (max - mid) * (adjusterLevelRaw - mid) + 127.5;
+  } else {
+    adjusterLevelScaled = 127.5 / (mid - min) * (adjusterLevelRaw - min);
+  }
+}
+
 bool Adjuster::initialize() {
   uint8_t controlByte = 0b00000000;
   return i2c_write_blocking(MODULES_I2C, addr, &controlByte, 1, false) !=
@@ -10,28 +23,31 @@ bool Adjuster::initialize() {
 }
 bool Adjuster::reset() { return initialize(); }
 bool Adjuster::communicate(const uint8_t *toDevice) {
-  uint8_t data[5];
-  int ret2 = i2c_read_blocking(MODULES_I2C, addr, &data[0], 5, false);
+  // initialize();
+  readBytes = i2c_read_blocking(MODULES_I2C, addr, &adjusterLevelRawT[0], 5, false);
 
-  if (ret2 == PICO_ERROR_GENERIC) {
+  if (readBytes == PICO_ERROR_GENERIC) {
     sleep_ms(10);
     reset();
     return false;
   }
 
-  adjusterLevel = (data[1] + data[2] + data[3] + data[4]) / 4;
+  processRawValue();
 
   return true;
 }
 uint8_t *Adjuster::getDataFromDevice() {
-  return &adjusterLevel;
+  return &adjusterLevelScaled;
 }
 unsigned Adjuster::testMode(DashboardMain *dBoard) {
   if (communicate(nullptr)) {
-    dBoard->writeOnDisplay("Adjuster test mocde", "RAW: " + std::to_string(adjusterLevel));
+    dBoard->writeLine(1, "RAW: " + std::to_string(adjusterLevelRaw) + " (" + std::to_string(adjusterLevelScaled) + ")");
+    dBoard->writeLine(3, "Readed bytes: " + std::to_string(readBytes));
   } else {
-    dBoard->writeOnDisplay("Error on communication!");
+    dBoard->writeLine(1, "Error on communication!");
+    dBoard->writeLine(3, "Readed bytes: " + std::to_string(readBytes));
   }
 
+  return adjusterLevelScaled;
   //TODO setting min max and add not RAW value
 }
