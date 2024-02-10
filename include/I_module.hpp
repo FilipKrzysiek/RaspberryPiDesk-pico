@@ -14,6 +14,7 @@ class DashboardMain;
 class I_Module {
 protected:
     const uint8_t addr;
+    bool initialized = false;
 
 public:
     virtual ~I_Module() = default;
@@ -59,6 +60,14 @@ public:
      */
     uint8_t getModuleAddress() {
         return addr;
+    }
+
+    /**
+     * @brief Checking that module was initialized
+     * @return true if module was initalized, false if not
+     */
+    bool isInitialized() {
+        return initialized;
     }
 };
 

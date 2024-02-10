@@ -65,7 +65,7 @@ tusb_desc_device_t const desc_device_cdc =
                 .bMaxPacketSize0    = CFG_TUD_ENDPOINT0_SIZE,
 
                 .idVendor           = 0xCafe,
-                .idProduct          = USB_PID_CDC,
+                .idProduct          = USB_PID_CDC + 22,
                 .bcdDevice          = 0x0100,
 
                 .iManufacturer      = 0x01,
@@ -83,13 +83,13 @@ tusb_desc_device_t const desc_device_gPad =
 
                 // Use Interface Association Descriptor (IAD) for CDC
                 // As required by USB Specs IAD's subclass must be common class (2) and protocol must be IAD (1)
-                .bDeviceClass       = TUSB_CLASS_UNSPECIFIED,
+                .bDeviceClass       = TUSB_CLASS_HID,
                 .bDeviceSubClass    = 0x00,
                 .bDeviceProtocol    = 0x00,
                 .bMaxPacketSize0    = CFG_TUD_ENDPOINT0_SIZE,
 
                 .idVendor           = 0xCafe,
-                .idProduct          = USB_PID_GPAD,
+                .idProduct          = USB_PID_GPAD + 11,
                 .bcdDevice          = 0x0100,
 
                 .iManufacturer      = 0x01,
@@ -139,10 +139,9 @@ uint8_t const *tud_descriptor_device_cb(void) {
 // HID Report Descriptor
 //--------------------------------------------------------------------+
 
-uint8_t const desc_joystick_report[] =
-        {
-                TUD_HID_REPORT_DESC_GAMEPAD_DASHBOARD (HID_REPORT_ID(1))
-        };
+uint8_t const desc_joystick_report[] = {
+        TUD_HID_REPORT_DESC_GAMEPAD_DASHBOARD (HID_REPORT_ID(1))
+};
 
 uint8_t const desc_deskDeck_report[] = {
         TUD_HID_REPORT_DESC_KEYBOARD(HID_REPORT_ID(1))
@@ -308,7 +307,8 @@ uint16_t const *tud_descriptor_string_cb(uint8_t index, uint16_t langid) {
 
         // Cap at max char
         chr_count = strlen(str);
-        if (chr_count > 31) chr_count = 31;
+        constexpr size_t max_count = sizeof(_desc_str) / sizeof(_desc_str[0]) - 1; // -1 for string type
+        if ( chr_count > max_count ) chr_count = max_count;
 
         // Convert ASCII string into UTF-16
         for (uint8_t i = 0; i < chr_count; i++) {

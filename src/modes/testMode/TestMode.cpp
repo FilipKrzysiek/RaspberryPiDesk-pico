@@ -20,7 +20,7 @@
         flgRefreshDisplay = oldSize != connectedModules.size();
 
         dBoard->readButtons();
-        readButtons = dBoard->getButtonsIbisStatusInt();
+        readButtons = dBoard->getButtonsIbisChanged();
         buttonAction();
         if (flgRefreshDisplay) {
             refreshDisplayConnected();
@@ -32,13 +32,13 @@
 }
 
 void TestMode::buttonAction() {
-    if (readButtons == 8 && selectedIndex > 0) {
+    if (readButtons == BASE_KYB_A && selectedIndex > 0) {
         --selectedIndex;
         flgRefreshDisplay = true;
-    } else if (readButtons == 128 && selectedIndex < connectedModules.size() - 1) {
+    } else if (readButtons == BASE_KYB_B && selectedIndex < connectedModules.size() - 1) {
         ++selectedIndex;
         flgRefreshDisplay = true;
-    } else if (readButtons == 32768) {
+    } else if (readButtons == BASE_KYB_D) {
         if (connectedModules[selectedIndex] == IBIS_BUTTONS_I2C_FANTOM) {
             ibisButtonsTM();
         } else {
@@ -53,7 +53,7 @@ void TestMode::refreshDisplayConnected() {
     if (selectedIndex < 1) {
         base = 0;
     } else if (selectedIndex > connectedModules.size() - 2) {
-        base = std::max<uint>(connectedModules.size() - 3, 0);
+        base = std::max<int>(connectedModules.size() - 3, 0);
     } else {
         base = selectedIndex - 1;
     }

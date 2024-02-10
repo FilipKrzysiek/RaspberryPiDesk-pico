@@ -32,8 +32,10 @@ void usb_task() {
 void send_hid_report() {
 // skip if hid is not ready yet
     if (!tud_hid_ready()) return;
+    //TODO when USB_JOYSTICK hid not ready
 
     if (usbCMode == USB_JOYSTICK) {
+        joystickReport.sendGpadReport();
 //        tud_hid_report(1, &report, sizeof(report));
     } else if (usbCMode == USB_DESK) {
         deskDeckReport.sendHidReport();

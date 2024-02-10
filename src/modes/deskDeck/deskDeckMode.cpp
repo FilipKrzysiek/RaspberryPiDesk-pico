@@ -27,7 +27,7 @@ usbConnectionMode_t DeskDeckMode::run() {
 void DeskDeckMode::mainButtons() {
     checkConnected();
     dBoard->readButtons();
-    auto buttonsStatus = dBoard->getButtonsIbisStatusInt();
+    auto buttonsStatus = dBoard->getButtonsIbisChanged();
     if (screenSleep && buttonsStatus != 0) {
         wakeUpScreen();
     }
@@ -70,7 +70,7 @@ void DeskDeckMode::selectMode() {
     unsigned short val;
     while (true) {
         dBoard->readButtons();
-        val = dBoard->getButtonsIbisStatusInt();
+        val = dBoard->getButtonsIbisChanged();
 
         if (val == MODE_SERIAl) {
             usbMode = USB_SERIAL;
@@ -120,7 +120,7 @@ void DeskDeckMode::insertingPredefinedText() {
             menu.updateMenu();
         }
 
-        val = dBoard->getButtonsIbisStatusInt();
+        val = dBoard->getButtonsIbisChanged();
 
         if (val == BASE_KYB_1) {
             writeString(predefiniedText[0]);
@@ -140,6 +140,8 @@ void DeskDeckMode::insertingPredefinedText() {
             writeString(predefiniedText[7]);
         } else if (val == BASE_KYB_9) {
             writeString(predefiniedText[8]);
+        } else if (val == BASE_KYB_D) {
+            sleep_ms(150);
         }
 
         sleep_ms(50);
@@ -155,7 +157,7 @@ void DeskDeckMode::inventorMode() {
     uint val = 0;
     while (val != BASE_KYB_D) {
         dBoard->readButtons();
-        val = dBoard->getButtonsIbisStatusInt();
+        val = dBoard->getButtonsIbisChanged();
 
         inventorModeKeyActions(val);
         sleep_ms(50);
@@ -197,7 +199,7 @@ void DeskDeckMode::omsiKeyboardMode() {
   uint val = 0;
   while (val != BASE_KYB_D) {
     dBoard->readButtons();
-    val = dBoard->getButtonsIbisStatusInt();
+    val = dBoard->getButtonsIbisChanged();
 
     uint8_t col = tu_log2(val) % 4;
     uint8_t row = tu_log2(val) / 4;

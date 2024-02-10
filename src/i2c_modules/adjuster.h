@@ -11,9 +11,10 @@ class Adjuster : public I_Module  {
   uint8_t &adjusterLevelRaw = adjusterLevelRawT[0];
   uint8_t adjusterLevelScaled;
   uint8_t readBytes = 0;
-  const uint8_t min = 1;
-  const uint8_t mid = 118;
-  const uint8_t max = 251;
+  const uint8_t minLevel = 1;
+  const uint8_t minMid = 113;
+  const uint8_t maxMid = 133;
+  const uint8_t maxLevel = 251;
 
 
   void processRawValue();

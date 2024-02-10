@@ -4,11 +4,29 @@
 
 #ifndef GAMEPADMODE_H
 #define GAMEPADMODE_H
-
+#include "DashboardMain.h"
+#include "I_module.hpp"
+#include "i2c_modules/adjuster.h"
+#include "usb/usbMode.hpp"
 
 
 class GamePadMode {
+    DashboardMain *dBoard;
+    // uint16_t statusDBoardButtons = 0;
+    // uint8_t statusAdjuster = 127;
+    usb_reports::Joystick::report_t *inputStates;
+    bool flgTryToInitialize = false;
 
+    Adjuster moduleAdjuster;
+
+    void getDataFromDBoard();
+
+    void getDataFromAdjuster();
+
+public:
+    explicit GamePadMode(DashboardMain *d_board);
+
+    void run();
 };
 
 

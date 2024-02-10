@@ -74,9 +74,31 @@ namespace usb_reports {
             }
         }
     };
+
+    class Joystick {
+    public:
+        struct report_t {
+            uint16_t ibisButtons = 2;
+            uint8_t adjuster = 127;
+            // uint8_t adjuster1 = 127;
+        };
+
+    private:
+         report_t report;
+
+    public:
+        void sendGpadReport() const {
+            tud_hid_report(1, &report, sizeof(report));
+        }
+
+        report_t *data() {
+            return &report;
+        }
+    };
 }
 
 
 extern usb_reports::DeskDeck deskDeckReport;
+extern usb_reports::Joystick joystickReport;
 
 #endif //OMSI2_USBMODE_H

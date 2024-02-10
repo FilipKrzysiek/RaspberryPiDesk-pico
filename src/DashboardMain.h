@@ -24,7 +24,8 @@ private:
 
     void pullDownSlaves();
 
-    void buttonsStateTabToUint();
+    __attribute__((__deprecated__))
+    void buttonsStateUintToTab();
 
     LCDgeneric lcd = LCDgeneric(new LcdHardwareI2c(LCD_I2C, LCD_I2C_ADR,
                                                    LCD_I2C_SCL, LCD_I2C_SDA));
@@ -48,14 +49,22 @@ public:
     /**
      * Get states of buttons
      * @return reference to buttons bool[16] array
+     * @deprecated This function is deprecated, will be removed in future
      */
+    __attribute__((__deprecated__))
     [[nodiscard]] const bool *getButtonsIbisStatus() const;
 
     /**
      * Get states of buttons
      * @return buttons status as unsigned int
      */
-    [[nodiscard]] unsigned getButtonsIbisStatusInt() ;
+    [[nodiscard]] unsigned getButtonsIbisStatusInt() const;
+
+    /**
+     * \brief Get status of buttons only this which changed to high state.
+     * \return buttons status (on bit one button)
+     */
+    [[nodiscard]] unsigned getButtonsIbisChanged() const;
 
     /**
      * Write line to display

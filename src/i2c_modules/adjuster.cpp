@@ -9,24 +9,28 @@ void Adjuster::processRawValue() {
   adjusterLevelRaw = tmp == 0 ? 0 : tmp / 4;
 
   //TODO add more complex calculations
-  if (adjusterLevelRaw > 118) {
-    adjusterLevelScaled = 127.5 / (max - mid) * (adjusterLevelRaw - mid) + 127.5;
+  if (adjusterLevelRaw > maxMid) {
+    adjusterLevelRaw = std::min(adjusterLevelRaw, maxLevel);
+    adjusterLevelScaled = 127.5 / (maxLevel - maxMid) * (adjusterLevelRaw - maxMid) + 127.5;
+  } else if (adjusterLevelRaw < minMid) {
+    adjusterLevelRaw = std::max(adjusterLevelRaw, minLevel);
+    adjusterLevelScaled = 127.5 / (minMid - minLevel) * (adjusterLevelRaw - minLevel);
   } else {
-    adjusterLevelScaled = 127.5 / (mid - min) * (adjusterLevelRaw - min);
+    adjusterLevelScaled = 127;
   }
 }
 
 bool Adjuster::initialize() {
   uint8_t controlByte = 0b00000000;
-  return i2c_write_blocking(MODULES_I2C, addr, &controlByte, 1, false) !=
-         PICO_ERROR_GENERIC;
+  initialized = i2c_write_blocking(MODULES_I2C, addr, &controlByte, 1, false) != PICO_ERROR_GENERIC;
+  return initialized;
 }
 bool Adjuster::reset() { return initialize(); }
 bool Adjuster::communicate(const uint8_t *toDevice) {
   // initialize();
   readBytes = i2c_read_blocking(MODULES_I2C, addr, &adjusterLevelRawT[0], 5, false);
 
-  if (readBytes == PICO_ERROR_GENERIC) {
+  if (readBytes == PICO_ERROR_GENERIC || readBytes != 5) {
     sleep_ms(10);
     reset();
     return false;

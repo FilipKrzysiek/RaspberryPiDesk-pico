@@ -10,6 +10,7 @@ bool UniversalBusDesk::initialize() {
     data[1] = 0b00000000;
     int ret = i2c_write_blocking(MODULES_I2C, addr, data, 2, false);
     if (ret < 0) {
+        initialized = false;
         return false;
     }
 
@@ -18,6 +19,7 @@ bool UniversalBusDesk::initialize() {
     data[2] = 0b11111111;
     ret = i2c_write_blocking(MODULES_I2C, addr, data, 3, false);
     if (ret < 0) {
+        initialized = false;
         return false;
     }
 
@@ -26,6 +28,7 @@ bool UniversalBusDesk::initialize() {
     data[2] = 0b11111111;
     ret = i2c_write_blocking(MODULES_I2C, addr, data, 3, false);
     if (ret < 0) {
+        initialized = false;
         return false;
     }
 
@@ -34,9 +37,11 @@ bool UniversalBusDesk::initialize() {
     data[2] = 0xFF;
     ret = i2c_write_blocking(MODULES_I2C, addr, data, 3, false);
     if (ret < 0) {
+        initialized = false;
         return false;
     }
 
+    initialized = true;
     return true;
 }
 

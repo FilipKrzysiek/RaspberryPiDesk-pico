@@ -17,15 +17,14 @@ DashboardMain::DashboardMain() {
 }
 
 void DashboardMain::pullDownSlaves() {
-  for (auto &pin : GP_KYB_SLAVE) {
-    gpio_set_dir(pin, GPIO_IN);
-    gpio_pull_down(pin);
-  }
+    for (auto &pin: GP_KYB_SLAVE) {
+        gpio_set_dir(pin, GPIO_IN);
+        gpio_pull_down(pin);
+    }
 }
-void DashboardMain::buttonsStateTabToUint() {
-    actualButtonStatus = 0;
+void DashboardMain::buttonsStateUintToTab() {
     for (int i = 0; i < 16; ++i) {
-        actualButtonStatus = actualButtonStatus | (buttonsIbisStatus[i] << i);
+        buttonsIbisStatus[i] = (actualButtonStatus << i) & 1;
     }
 }
 
@@ -33,9 +32,12 @@ const bool *DashboardMain::getButtonsIbisStatus() const {
     return buttonsIbisStatus;
 }
 
-unsigned DashboardMain::getButtonsIbisStatusInt() {
-    buttonsStateTabToUint();
+unsigned DashboardMain::getButtonsIbisStatusInt() const {
     return actualButtonStatus;
+}
+
+unsigned DashboardMain::getButtonsIbisChanged() const {
+    return (prevButtonStatus ^ actualButtonStatus) & actualButtonStatus;
 }
 
 void DashboardMain::readButtons() {
@@ -46,10 +48,12 @@ inline void DashboardMain::readKybButtons() {
     pullDownSlaves();
     pullUpKybMaster0();
     sleep_us(1);
+    prevButtonStatus = actualButtonStatus;
+    actualButtonStatus = 0;
 
     unsigned short i = 12;
     for (auto &btn: GP_KYB_SLAVE) {
-        buttonsIbisStatus[i] = gpio_get(btn);
+        actualButtonStatus = actualButtonStatus | (gpio_get(btn) << i);
         ++i;
     }
 
@@ -58,7 +62,7 @@ inline void DashboardMain::readKybButtons() {
     sleep_us(1);
 
     for (auto &btn: GP_KYB_SLAVE) {
-        buttonsIbisStatus[i] = gpio_get(btn);
+        actualButtonStatus = actualButtonStatus | (gpio_get(btn) << i);
         ++i;
     }
 
@@ -70,19 +74,18 @@ inline void DashboardMain::readKybButtons() {
         gpio_set_dir(btn, GPIO_OUT);
         gpio_put(btn, true);
         sleep_us(1);
-        buttonsIbisStatus[i + 8] = gpio_get(GP_KYB_MASTER_0);
-        buttonsIbisStatus[i] = gpio_get(GP_KYB_MASTER_1);
+        actualButtonStatus = actualButtonStatus | (gpio_get(GP_KYB_MASTER_0) << (i + 8));
+        actualButtonStatus = actualButtonStatus | (gpio_get(GP_KYB_MASTER_1) << i);
         gpio_set_dir(btn, GPIO_IN);
         gpio_pull_down(btn);
         ++i;
     }
 
-    buttonsStateTabToUint();
+    buttonsStateUintToTab();
     if (actualButtonStatus != 0 && prevButtonStatus != actualButtonStatus) {
         gpio_put(GP_BUZZER, true);
         add_alarm_in_ms(GP_BUZZER_TIME, buzzerStop, nullptr, true);
     }
-    prevButtonStatus = actualButtonStatus;
 }
 
 void DashboardMain::pullUpKybMaster0() {
