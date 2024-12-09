@@ -199,7 +199,7 @@ void DeskDeckMode::omsiKeyboardMode() {
   uint val = 0;
   while (val != BASE_KYB_D) {
     dBoard->readButtons();
-    val = dBoard->getButtonsIbisChanged();
+    val = dBoard->getButtonsIbisStatusInt();
 
     uint8_t col = tu_log2(val) % 4;
     uint8_t row = tu_log2(val) / 4;

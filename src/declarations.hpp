@@ -8,7 +8,7 @@
 #include <map>
 #include "pico/stdlib.h"
 
-#define GP_BUZZER 17
+#define GP_BUZZER 16
 #define GP_BUZZER_TIME 25
 
 #define MODE_SERIAl 1
@@ -25,8 +25,8 @@
 
 constexpr i2c_inst_t *LCD_I2C = i2c0;
 #define LCD_I2C_ADR 0x27
-#define LCD_I2C_SDA 0
-#define LCD_I2C_SCL 1
+#define LCD_I2C_SDA 12
+#define LCD_I2C_SCL 13
 
 constexpr i2c_inst_t *MODULES_I2C = i2c1;
 #define MODULES_I2C_SDA 14
@@ -43,7 +43,7 @@ constexpr uint MODULES_LIST[] = {0x21, 0x48, 0x00};
 const std::map<uint, const char *> MODULES_NAME_LIST = {{0x21,                    "Bus desk basic"},
                                                         {0x48,                    "Adjuster"},
                                                         {IBIS_BUTTONS_I2C_FANTOM, "IBIS.md buttons"}};
-constexpr uint GP_KYB_SLAVE[] = {GP_KYB_SLAVE_0, GP_KYB_SLAVE_1, GP_KYB_SLAVE_2, GP_KYB_SLAVE_3};
+constexpr uint GP_KYB_SLAVE[] = {GP_KYB_SLAVE_3, GP_KYB_SLAVE_2, GP_KYB_SLAVE_1, GP_KYB_SLAVE_0};
 
 const uint8_t CHAR_DOTS_AR_UP[]{
         0b00100,
