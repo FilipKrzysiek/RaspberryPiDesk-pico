@@ -11,12 +11,12 @@ void Adjuster::processRawValue() {
   //TODO add more complex calculations
   if (adjusterLevelRaw > maxMid) {
     adjusterLevelRaw = std::min(adjusterLevelRaw, maxLevel);
-    adjusterLevelScaled = 127.5 / (maxLevel - maxMid) * (adjusterLevelRaw - maxMid) + 127.5;
+    adjusterLevelScaled = 127 / (maxLevel - maxMid) * (adjusterLevelRaw - maxMid) + 128;
   } else if (adjusterLevelRaw < minMid) {
     adjusterLevelRaw = std::max(adjusterLevelRaw, minLevel);
-    adjusterLevelScaled = 127.5 / (minMid - minLevel) * (adjusterLevelRaw - minLevel);
+    adjusterLevelScaled = 128 / (minMid - minLevel) * (adjusterLevelRaw - minLevel);
   } else {
-    adjusterLevelScaled = 127;
+    adjusterLevelScaled = 128;
   }
 }
 
