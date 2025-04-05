@@ -117,7 +117,7 @@ bool UniversalBusDesk::getButtonsState() {
     return true;
 }
 
-UniversalBusDesk::UniversalBusDesk() : I_Module(0x21) {}
+UniversalBusDesk::UniversalBusDesk() : I_Module(0x21, 1, 2) {}
 
 uint8_t *UniversalBusDesk::getDataFromDevice() {
     return reinterpret_cast<uint8_t*>(&buttonsState);

@@ -17,9 +17,11 @@ protected:
     bool initialized = false;
 
 public:
+    const uint8_t D_SIZE_TD = 0; /**< Bytes send to device*/
+    const uint8_t D_SIZE_FD = 0; /**< Bytes received from device*/
     virtual ~I_Module() = default;
 
-    explicit I_Module(uint8_t addr): addr(addr) {}
+    explicit I_Module(uint8_t addr, uint8_t bytesToDevice, uint8_t bytesFromDevice): addr(addr), D_SIZE_TD(bytesToDevice), D_SIZE_FD(bytesFromDevice) {}
 
     /**
      * Initialize i2c interface and configure module

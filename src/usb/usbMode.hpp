@@ -9,6 +9,7 @@
 
 const uint32_t usbReportInterval_ms = 5;
 
+
 typedef enum {
     USB_NONE,
     USB_SERIAL,
@@ -18,16 +19,19 @@ typedef enum {
     USB_TEST_MODE
 } usbConnectionMode_t;
 
+
 extern usbConnectionMode_t usbCMode;
 
 
 namespace usb_reports {
     class DeskDeck {
-        uint8_t keyCode[6] = { 0 };
-        uint8_t prevKeyCode[6] = { 0 };
+        uint8_t keyCode[6] = {0};
+        uint8_t prevKeyCode[6] = {0};
         uint8_t modifier = 0;
 
-        enum ToSendStatus {NOT_READY, SENDED, READY_TO_SEND};
+
+        enum ToSendStatus { NOT_READY, SENDED, READY_TO_SEND };
+
 
         ToSendStatus flgToSend = NOT_READY;
 
@@ -75,16 +79,40 @@ namespace usb_reports {
         }
     };
 
+
+    /**
+     * Joystick data and functions to send USB report
+     */
     class Joystick {
     public:
+        /**
+         * Report data structure, which will send by USB
+         */
         struct report_t {
-            uint16_t ibisButtons = 2;
-            uint8_t adjuster = 127;
+            uint16_t ibisButtons = 2; /**< Buttons from IBIS, one button one bit */
+
+            /**
+             * Other buttons.
+             *
+             * Bit | Description | Module
+             * -- | ------------ | -----
+             * 0  | Emergency brake | Adjuster
+             * 1  | - |
+             * 2  | - |
+             * 3  | - |
+             * 4  | - |
+             * 5  | - |
+             * 6  | - |
+             * 7  | - |
+             */
+            uint8_t buttons = 0;
+
+            uint8_t adjuster = 127; /**< Adjuster level */
             // uint8_t adjuster1 = 127;
         };
 
     private:
-         report_t report;
+        report_t report;
 
     public:
         void sendGpadReport() const {

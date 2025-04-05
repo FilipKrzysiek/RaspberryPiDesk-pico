@@ -22,7 +22,9 @@ void GamePadMode::getDataFromAdjuster() {
             return;
         }
 
-        inputStates->adjuster = *(moduleAdjuster.getDataFromDevice());
+        auto *adjusterData = moduleAdjuster.getDataFromDevice();
+        inputStates->adjuster = adjusterData[0];
+        inputStates->buttons = (inputStates->buttons & 0b11111110) | (adjusterData[1] & 0b00000001);
     } else {
         if (flgTryToInitialize) {
             moduleAdjuster.initialize();

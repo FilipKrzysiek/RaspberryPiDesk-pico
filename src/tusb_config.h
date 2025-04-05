@@ -125,7 +125,7 @@ extern "C" {
 // CDC Endpoint transfer buffer size, more is faster
 #define CFG_TUD_CDC_EP_BUFSIZE   (TUD_OPT_HIGH_SPEED ? 512 : 64)
 
-#define CFG_TUD_HID_EP_BUFSIZE 16
+#define CFG_TUD_HID_EP_BUFSIZE 32
 
 // Usage got from documentation: https://www.usb.org/sites/default/files/hut1_4.pdf
 // Table 3.1 Usage page
@@ -138,15 +138,20 @@ extern "C" {
   HID_COLLECTION ( HID_COLLECTION_APPLICATION )        ,\
     /* Report ID if any */ \
     __VA_ARGS__ \
-    /* 16 bit Button Map */ \
+    /* Buff bits 0 - 32 */ \
+    /* 17 bit Button Map */ \
     HID_USAGE_PAGE   ( HID_USAGE_PAGE_BUTTON                  ) ,\
     HID_USAGE_MIN    ( 1                                      ) ,\
-    HID_USAGE_MAX    ( 16                                     ) ,\
+    HID_USAGE_MAX    ( 17                                     ) ,\
     HID_LOGICAL_MIN  ( 0                                      ) ,\
     HID_LOGICAL_MAX  ( 1                                      ) ,\
-    HID_REPORT_COUNT ( 16                                     ) ,\
+    HID_REPORT_COUNT ( 17                                     ) ,\
     HID_REPORT_SIZE  ( 1                                      ) ,\
     HID_INPUT        ( HID_DATA | HID_VARIABLE | HID_ABSOLUTE ) ,\
+    /* Fill blank space in buff size*/ \
+    HID_REPORT_COUNT ( 1                                       ) ,\
+    HID_REPORT_SIZE  ( 7                                       ) ,\
+    HID_INPUT        ( HID_CONSTANT                            ) ,\
     /* Accelerate/brake axle */ \
     HID_USAGE_PAGE   ( HID_USAGE_PAGE_SIMULATE                ) ,\
     HID_LOGICAL_MIN  ( 0x00                                   ) ,\
@@ -155,10 +160,14 @@ extern "C" {
     HID_REPORT_COUNT ( 1                                      ) ,\
     HID_REPORT_SIZE  ( 8                                      ) ,\
     HID_INPUT        ( HID_DATA | HID_VARIABLE | HID_ABSOLUTE ) ,\
-    HID_REPORT_COUNT ( 1                                       ) ,\
-    HID_REPORT_SIZE  ( 8                                       ) ,\
-    HID_INPUT        ( HID_CONSTANT                            ) ,\
     HID_COLLECTION_END \
+
+
+    // /* Fill blank space in buff size*/ \
+    // HID_REPORT_COUNT ( 3                                       ) ,\
+    // HID_REPORT_SIZE  ( 8                                       ) ,\
+    // HID_INPUT        ( HID_CONSTANT                            ) ,\
+    // HID_COLLECTION_END \
 
 
 /* X, Y, Z, Rz (min -127, max 127 ) */ /*\
