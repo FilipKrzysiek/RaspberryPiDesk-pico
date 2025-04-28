@@ -9,6 +9,7 @@
 GamePadMode::GamePadMode(DashboardMain *d_board)
         : dBoard(d_board), inputStates(joystickReport.data()) {
     moduleAdjuster.initialize();
+    moduleUniversalTramDesk.initialize();
 }
 
 void GamePadMode::getDataFromDBoard() {
@@ -24,10 +25,26 @@ void GamePadMode::getDataFromAdjuster() {
 
         auto *adjusterData = moduleAdjuster.getDataFromDevice();
         inputStates->adjuster = adjusterData[0];
-        inputStates->buttons = (inputStates->buttons & 0b11111110) | (adjusterData[1] & 0b00000001);
+        inputStates->buttons = (inputStates->buttons & 0b1111'1111'1111'1110) | (adjusterData[1] & 0b0000'0000'0000'0001);
     } else {
         if (flgTryToInitialize) {
             moduleAdjuster.initialize();
+        }
+    }
+}
+
+void GamePadMode::getDataFromTramDashboard() {
+    if (moduleUniversalTramDesk.isInitialized()) {
+        if (!moduleUniversalTramDesk.communicate(nullptr)) {
+            return;
+        }
+
+        auto *tramData = moduleUniversalTramDesk.getDataFromDevice();
+        inputStates->buttons = (inputStates->buttons & 0b0000'0000'0000'0001) | ((tramData[0] << 1) & 0b0000'0001'1111'1110);
+
+    } else {
+        if (flgTryToInitialize) {
+            moduleUniversalTramDesk.initialize();
         }
     }
 }
@@ -47,6 +64,7 @@ void GamePadMode::run() {
         }
         getDataFromDBoard();
         getDataFromAdjuster();
+        getDataFromTramDashboard();
 
         if (board_millis() - start_ms < 100) {
             sleep_ms(5);

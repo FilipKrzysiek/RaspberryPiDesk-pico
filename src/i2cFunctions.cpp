@@ -4,6 +4,8 @@
 
 #include "i2cFunctions.h"
 
+#include "i2c_modules/UniversalTramDesk.h"
+
 std::vector<uint> i2c_fun::getConnectedDevices(i2c_inst_t *i2c) {
     std::vector<uint> results;
     int ret;
@@ -37,6 +39,9 @@ I_Module *i2c_fun::getModule(uint addr, DashboardMain *dBoard) {
 
     if (addr == 0x48)
         return new Adjuster();
+
+    if (addr == 0x27)
+        return new UniversalTramDesk();
 
     return nullptr;
 }

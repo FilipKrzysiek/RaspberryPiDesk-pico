@@ -6,6 +6,7 @@
 #define GAMEPADMODE_H
 #include "DashboardMain.h"
 #include "I_module.hpp"
+#include "i2c_modules/UniversalTramDesk.h"
 #include "i2c_modules/adjuster.h"
 #include "usb/usbMode.hpp"
 
@@ -18,10 +19,13 @@ class GamePadMode {
     bool flgTryToInitialize = false;
 
     Adjuster moduleAdjuster;
+    UniversalTramDesk moduleUniversalTramDesk;
 
     void getDataFromDBoard();
 
     void getDataFromAdjuster();
+
+    void getDataFromTramDashboard();
 
 public:
     explicit GamePadMode(DashboardMain *d_board);

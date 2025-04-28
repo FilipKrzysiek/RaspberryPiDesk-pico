@@ -31,7 +31,9 @@ add_executable(RaspberryPiDesk-pico
         src/modes/gamePadMode/GamePadMode.cpp
         src/modes/gamePadMode/GamePadMode.h
         src/constFunctions.h
-        src/modes/deskDeck/declarations.h)
+        src/modes/deskDeck/declarations.h
+        src/i2c_modules/UniversalTramDesk.cpp
+        src/i2c_modules/UniversalTramDesk.h)
 
 target_include_directories(RaspberryPiDesk-pico PUBLIC src include)
 

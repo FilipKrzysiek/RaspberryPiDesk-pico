@@ -50,7 +50,8 @@ public:
     virtual uint8_t *getDataFromDevice() = 0;
 
     /**
-     * Single call, when device running in test usbMode. Printing on display in lines 1, 2 and 3 debug informations.
+     * Single call, when device running in test usbMode. Printing on display in lines 1, 2 and 3 debug information.
+     * Method is called every 100ms.
      * @param dBoard pointer to DashboardMain allowing to get ibis buttons state and printing on display
      * @return read data from module
      */

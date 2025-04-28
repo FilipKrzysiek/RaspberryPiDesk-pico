@@ -12,16 +12,16 @@ In this part describes connections with microcontroller and device construction.
 Custom modules was connected to base using 8P8C (RJ45) port and using i2c protocol.
 Cable description:
 
-| PIN number |    Color     | Connection |
-|:----------:|:------------:|:----------:|
-|     1.     | green-white  |    SDA     |
-|     2.     |    green     |    SCL     |
-|     3.     | orange-white |    GND     |
-|     4.     |    orange    |    GND     |
-|     5.     |  blue-white  |   +3.3V    |
-|     6.     |     blue     |   +3.3V    |
-|     7.     | brown-white  |    +5V     |
-|     8.     |    brown     |    +5V     |
+| PIN number |    Color     | Connection |    T568A     |    T568B     |
+|:----------:|:------------:|:----------:|:------------:|:------------:|
+|     1.     | green-white  |    SDA     | green-white  | orange-white |
+|     2.     |    green     |    SCL     |    green     |    orange    |
+|     3.     | orange-white |    GND     | orange-white | green-white  |
+|     4.     |    orange    |    GND     |     blue     |     blue     |
+|     5.     |  blue-white  |   +3.3V    |  blue+white  |  blue+white  |
+|     6.     |     blue     |   +3.3V    |    orange    |    green     |
+|     7.     | brown-white  |    +5V     | brown-white  | brown-white  |
+|     8.     |    brown     |    +5V     |    brown     |    brown     |
 
 &nbsp;
 

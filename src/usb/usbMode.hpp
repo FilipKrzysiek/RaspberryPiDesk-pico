@@ -105,10 +105,12 @@ namespace usb_reports {
              * 6  | - |
              * 7  | - |
              */
-            uint8_t buttons = 0;
+            uint16_t buttons = 0;
 
             uint8_t adjuster = 127; /**< Adjuster level */
             // uint8_t adjuster1 = 127;
+            uint8_t fill = 0;
+            uint16_t fill1 = 0;
         };
 
     private:
