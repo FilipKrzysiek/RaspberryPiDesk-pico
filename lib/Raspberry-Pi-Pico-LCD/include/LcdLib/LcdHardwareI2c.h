@@ -32,9 +32,8 @@ public:
     void disableBackLight() override;
 
 private:
-    uint PIN_I2C[2];
     const uint8_t I2C_ADDRESS;
-    i2c_inst_t I2C_NUM;
+    i2c_inst_t I2C_intNumber;
     bool backlightIsOn = true;
 
     void writeDataToI2C(uint8_t data);
