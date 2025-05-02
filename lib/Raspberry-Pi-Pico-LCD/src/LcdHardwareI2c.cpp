@@ -9,15 +9,13 @@ LcdHardwareI2c::LcdHardwareI2c(i2c_inst *i2c, uint8_t i2cAddress, uint *pinI2C) 
                                                                                                 pinI2C[1]) {}
 
 LcdHardwareI2c::LcdHardwareI2c(i2c_inst_t *i2c, uint8_t i2cAddress, uint pinI2C_1, uint pinI2C_2) : I2C_ADDRESS(
-        i2cAddress), I2C_NUM(*i2c) {
-    PIN_I2C[0] = pinI2C_1;
-    PIN_I2C[1] = pinI2C_2;
+        i2cAddress), I2C_intNumber(*i2c) {
 
     i2c_init(i2c, 100 * 1000);
-    gpio_set_function(PIN_I2C[0], GPIO_FUNC_I2C);
-    gpio_set_function(PIN_I2C[1], GPIO_FUNC_I2C);
-    gpio_pull_up(PIN_I2C[0]);
-    gpio_pull_up(PIN_I2C[1]);
+    gpio_set_function(pinI2C_1, GPIO_FUNC_I2C);
+    gpio_set_function(pinI2C_2, GPIO_FUNC_I2C);
+    gpio_pull_up(pinI2C_1);
+    gpio_pull_up(pinI2C_2);
 }
 
 void LcdHardwareI2c::writeData(bool rs, bool rw, uint8_t data) {
@@ -40,13 +38,13 @@ void LcdHardwareI2c::disableBackLight() {
 }
 
 void LcdHardwareI2c::writeDataToI2C(uint8_t data) {
-    i2c_write_blocking(&I2C_NUM, I2C_ADDRESS, &data, 1, false);
+    i2c_write_blocking(&I2C_intNumber, I2C_ADDRESS, &data, 1, false);
     sleep_us(commandSleepTime);
     data = data | I2C_ENABLE;
-    i2c_write_blocking(&I2C_NUM, I2C_ADDRESS, &data, 1, false);
+    i2c_write_blocking(&I2C_intNumber, I2C_ADDRESS, &data, 1, false);
     sleep_us(commandSleepTime);
     data = data & ~I2C_ENABLE;
-    i2c_write_blocking(&I2C_NUM, I2C_ADDRESS, &data, 1, false);
+    i2c_write_blocking(&I2C_intNumber, I2C_ADDRESS, &data, 1, false);
     sleep_us(commandSleepTime);
 }
 
