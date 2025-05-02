@@ -7,7 +7,7 @@
 
 #include <class/hid/hid_device.h>
 
-const uint32_t usbReportInterval_ms = 5;
+constexpr uint32_t usbReportInterval_ms = 5;
 
 
 typedef enum {
@@ -30,7 +30,7 @@ namespace usb_reports {
         uint8_t modifier = 0;
 
 
-        enum ToSendStatus { NOT_READY, SENDED, READY_TO_SEND };
+        enum ToSendStatus { NOT_READY, SEND, READY_TO_SEND };
 
 
         ToSendStatus flgToSend = NOT_READY;
@@ -69,9 +69,9 @@ namespace usb_reports {
         void sendHidReport() {
             if (flgToSend == READY_TO_SEND && keyCode[0] != 0) {
                 tud_hid_keyboard_report(1, modifier, keyCode);
-                flgToSend = SENDED;
+                flgToSend = SEND;
             } else {
-                if (flgToSend == SENDED) {
+                if (flgToSend == SEND) {
                     tud_hid_keyboard_report(1, 0, nullptr);
                     flgToSend = NOT_READY;
                 }
@@ -81,7 +81,7 @@ namespace usb_reports {
 
 
     /**
-     * Joystick data and functions to send USB report
+     * Joystick data and functions to send a USB report
      */
     class Joystick {
     public:
@@ -94,23 +94,23 @@ namespace usb_reports {
             /**
              * Other buttons.
              *
-             * Bit | Description | Module
-             * -- | ------------ | -----
-             * 0  | Emergency brake | Adjuster
-             * 1  | - |
-             * 2  | - |
-             * 3  | - |
-             * 4  | - |
-             * 5  | - |
-             * 6  | - |
-             * 7  | - |
+             * Bit | Description              | Module
+             * --- | ------------------------ | -----
+             * 0   | Emergency brake          | Adjuster
+             * 1   | Left indicator           | Universal Tram Desk
+             * 2   | Disable indicator        | Universal Tram Desk
+             * 3   | Right indicator          | Universal Tram Desk
+             * 4   | Change switch to left    | Universal Tram Desk
+             * 5   | Disable switch change    | Universal Tram Desk
+             * 6   | Change switch to right   | Universal Tram Desk
+             * 7   | Unlock open door         | Universal Tram Desk
+             * 8   | Lock/close door          | Universal Tram Desk
              */
             uint16_t buttons = 0;
 
             uint8_t adjuster = 127; /**< Adjuster level */
-            // uint8_t adjuster1 = 127;
-            uint8_t fill = 0;
-            uint16_t fill1 = 0;
+            uint8_t fill = 0; /**< Fill in data structure so that its size is 64 bits */
+            uint16_t fill1 = 0; /**< Fill in data structure so that its size is 64 bits */
         };
 
     private:

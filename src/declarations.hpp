@@ -7,6 +7,7 @@
 
 #include <map>
 #include "pico/stdlib.h"
+#include "hardware/i2c.h"
 
 #define GP_BUZZER 16
 #define GP_BUZZER_TIME 25
@@ -27,6 +28,8 @@ constexpr i2c_inst_t *LCD_I2C = i2c0;
 #define LCD_I2C_ADR 0x27
 #define LCD_I2C_SDA 12
 #define LCD_I2C_SCL 13
+
+#define EEPROM_I2C_ADDR 0x57
 
 constexpr i2c_inst_t *MODULES_I2C = i2c1;
 #define MODULES_I2C_SDA 14

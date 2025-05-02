@@ -77,10 +77,11 @@ Starting from left:
 
 Some data are stor in EEPROM memory. Saved information:
 
-|  Module  |                Description                 | Size (bytes) | Byte index |
-|:--------:|:------------------------------------------:|:------------:|:----------:|
-| Adjuster |        Potentiometer level: minimum        |      1       |     0      |
-| Adjuster |        Potentiometer level: maximum        |      1       |     1      |
-| Adjuster |    Potentiometer level: emergency brake    |      1       |     2      |
-| Adjuster | Potentiometer level: middle position start |      1       |     3      |
-| Adjuster |  Potentiometer level: middle position end  |      1       |     4      |
+|      Module       |                               Description                                | Size (bytes) |  Byte index  |
+|:-----------------:|:------------------------------------------------------------------------:|:------------:|:------------:|
+|     Adjuster      |                       Potentiometer level: minimum                       |      1       |      0       |
+|     Adjuster      |                       Potentiometer level: maximum                       |      1       |      1       |
+|     Adjuster      |                   Potentiometer level: emergency brake                   |      1       |      2       |
+|     Adjuster      |                Potentiometer level: middle position start                |      1       |      3       |
+|     Adjuster      |                 Potentiometer level: middle position end                 |      1       |      4       |
+| UniversalTramDesk | Buttons mode |     2/8      | 5 (bit 0, 1) |

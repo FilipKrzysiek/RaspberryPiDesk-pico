@@ -17,7 +17,7 @@ usb_reports::Joystick joystickReport;
 int main() {
     auto *dBoard = initialize();
     scanAndShowModules(dBoard);
-    sleep_ms(2500);
+    sleep_ms(2000);
 
     {
         usbCMode = USB_DESK;

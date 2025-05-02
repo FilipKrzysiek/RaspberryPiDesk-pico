@@ -11,6 +11,8 @@ Jeżeli chcemy tylko i wyłącznie programować, to wystrarczy podłączyć nieb
 
 [Instalacja potrzebnych narzędzi](https://learn.microsoft.com/en-us/windows/wsl/connect-usb)
 
+[picoProbe](https://github.com/raspberrypi/debugprobe/releases/tag/debugprobe-v2.2.2)
+
 1. Uruchom powershell w trybie administratora
 2. Wypisz podłączone urządzenia
 
