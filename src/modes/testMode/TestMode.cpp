@@ -100,9 +100,31 @@ std::string TestMode::getNameOfI2CModules(const uint &indx) {
     dBoard->writeOnDisplay("IBIS.md buttons Test Mode");
     bool ledState = false;
 
+    ConfigStorage storage;
+
+    uint8_t byte = 0;
+
     while (true) {
         dBoard->readButtons();
         dBoard->writeLine(1, std::bitset<16>(dBoard->getButtonsIbisStatusInt()).to_string());
+
+        dBoard->writeLine(2, "EPROM byte: " + std::to_string(byte) + " A\b B\1");
+
+        auto readByte = storage.readByte(byte);
+
+        if (readByte) {
+            dBoard->writeLine(3, std::bitset<8>(readByte.value()).to_string());
+        } else {
+            dBoard->writeLine(3, "--------");
+        }
+
+        uint16_t buttons = dBoard->getButtonsIbisChanged();
+
+        if (buttons == BASE_KYB_A) {
+            ++byte;
+        } else if (buttons == BASE_KYB_B) {
+            --byte;
+        }
 
         sleep_ms(100);
 

@@ -28,10 +28,9 @@ std::optional<uint8_t> ConfigStorage::getAdjusterMiddleUpperLevel() const {
 }
 
 std::optional<ConfigStorage::UniversalDeskMode> ConfigStorage::getUniversalTramDeskMode() const {
-    auto modeB0 = readBit(5, 0);
-    auto modeB1 = readBit(5, 1);
-    if (modeB0.has_value() && modeB1.has_value()) {
-        uint8_t mode = modeB0.value() + modeB1.value() * 2;
+    auto byteOpt = readByte(5);
+    if (byteOpt) {
+        uint8_t mode = byteOpt.value() & 0b0000'0011;
         return static_cast<UniversalDeskMode>(mode);
     } else {
         return {};
@@ -67,9 +66,13 @@ bool ConfigStorage::setUniversalTramDeskMode(ConfigStorage::UniversalDeskMode va
         return writeByte(5, 2);
     }
 
+    return false;
+}
+
+bool ConfigStorage::setUniversalTramDeskModeC(uint8_t value) {
     uint8_t mode = static_cast<uint8_t>(value);
-    bool success = writeBit(5, 0, mode % 2);
-    return writeBit(5, 1, (mode/2) % 2) && success;
+    bool success = writeBit(5, 0, mode & 1);
+    return writeBit(5, 1, (mode >> 1) & 1) && success;
 }
 
 std::optional<uint8_t> ConfigStorage::readByte(uint8_t byte) const {
@@ -87,7 +90,7 @@ std::optional<uint8_t> ConfigStorage::readByte(uint8_t byte) const {
 bool ConfigStorage::writeByte(uint8_t byte, uint8_t value) {
     uint8_t writeData[2] = {byte, value};
 
-    int status = i2c_write_blocking(LCD_I2C, EEPROM_I2C_ADDR, writeData, 2, true);
+    int status = i2c_write_blocking(LCD_I2C, EEPROM_I2C_ADDR, writeData, 2, false);
 
     return status != PICO_ERROR_GENERIC && status != PICO_ERROR_TIMEOUT;
 }
@@ -121,3 +124,5 @@ bool ConfigStorage::writeBit(uint8_t byte, uint8_t bit, bool value) {
 
 //TODO find why other bytes are changing
 //TODO change mode not working
+
+//TODO writebit and rwdbit works incorrect

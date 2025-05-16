@@ -193,22 +193,24 @@ unsigned int UniversalTramDesk::testMode(DashboardMain *dBoard) {
     auto buttons = dBoard->getButtonsIbisChanged();
 
     if (buttons == BASE_KYB_A) {
-        dBoard->writeLine(3, "Tramsim mode!");
         if (!storage.setUniversalTramDeskMode(UDM::TramSim)) {
             deskMode = UDM::Error;
         } else {
-            // updateMode();
+            sleep_ms(10);
+            updateMode();
         }
     } else if (buttons == BASE_KYB_B) {
-        if (!storage.setUniversalTramDeskMode(UDM::CTSTram)) {
+        if (!storage.setUniversalTramDeskMode(ConfigStorage::UniversalDeskMode::CTSTram)) {
             deskMode = UDM::Error;
         } else {
+            sleep_ms(10);
             updateMode();
         }
     } else if (buttons == BASE_KYB_C) {
         if (!storage.setUniversalTramDeskMode(UDM::Raw)) {
             deskMode = UDM::Error;
         } else {
+            sleep_ms(10);
             updateMode();
         }
     }

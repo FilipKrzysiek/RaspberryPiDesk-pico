@@ -7,10 +7,9 @@
 #include "declarations.hpp"
 #include <optional>
 
-
 class ConfigStorage {
 public:
-    enum class UniversalDeskMode {
+    enum class UniversalDeskMode: uint8_t {
         Raw = 0,
         TramSim = 1,
         CTSTram = 2,
@@ -40,6 +39,8 @@ public:
     bool setAdjusterMiddleUpperLevel(uint8_t value);
 
     bool setUniversalTramDeskMode(UniversalDeskMode value);
+
+    bool setUniversalTramDeskModeC(uint8_t value);
 
     std::optional<uint8_t> readByte(uint8_t byte) const;
 
