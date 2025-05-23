@@ -6,7 +6,6 @@
 #define RASPBERRYPIDESK_PICO_DASHBOARDMAIN_H
 
 #include <pico/stdlib.h>
-#include "hardware/i2c.h"
 #include "declarations.hpp"
 #include "LcdLib/LCDbase.h"
 #include "LcdLib/LcdHardwareI2c.h"

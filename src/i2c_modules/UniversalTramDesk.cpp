@@ -4,98 +4,81 @@
 
 #include "UniversalTramDesk.h"
 
-uint16_t UniversalTramDesk::updateBit(PairRawBitJoystick bits, uint8_t value) {
-    return ((value >> bits.rawBit) & 1) << bits.joystickBit;
-}
 
-uint16_t UniversalTramDesk::updateBitAndUpdateTime(PairRawBitJoystick &bits, uint8_t value) {
-    uint8_t actualValue = (value >> bits.rawBit) & 1;
-
-    updateValueByTime(actualValue, bits);
-
-    return actualValue << bits.joystickBit;
-}
-
-void UniversalTramDesk::updateValueByTime(uint8_t &actualValue, PairRawBitJoystick &bits) {
-    if (actualValue == ((previousData >> bits.joystickBit) & 1)) {
-        if (actualValue && now - bits.enableTime > pressTime) {
-            actualValue = 0;
-        }
+bool UniversalTramDesk::updateValueByTime(bool actualValue, PairRawBitJoystick &bits) {
+    if (actualValue == true && ((previousRaw >> bits.rawBit) & 1) == 0) {
+        bits.enableTime = now;
     } else {
-        if (actualValue) {
-            bits.enableTime = now;
+        if (now - bits.enableTime > pressTime) {
+            actualValue = false;
+        } else {
+            actualValue = true;
         }
     }
+
+    return actualValue;
 }
 
-uint16_t UniversalTramDesk::updateRawToJoystickBits() {
-    uint16_t result{0};
-
-    result += updateBitAndUpdateTime(RTJB.leftIndicator, data[0]);
-    result += updateBitAndUpdateTime(RTJB.rightIndicator, data[0]);
-    result += updateBitAndUpdateTime(RTJB.leftSwitch, data[0]);
-    result += updateBitAndUpdateTime(RTJB.rightSwitch, data[0]);
-    result += updateBit(RTJB.unlockDoors, data[0]);
-    result += updateBit(RTJB.lockDoors, data[0]);
+std::bitset<16> UniversalTramDesk::updateRawToJoystickBits() const {
+    std::bitset<16> result;
+    result[RTJB.leftIndicator.joystickBit] = (data[0] >> RTJB.leftIndicator.rawBit) & 1;
+    result[RTJB.rightIndicator.joystickBit] = (data[0] >> RTJB.rightIndicator.rawBit) & 1;
+    result[RTJB.leftSwitch.joystickBit] = (data[0] >> RTJB.leftSwitch.rawBit) & 1;
+    result[RTJB.rightSwitch.joystickBit] = (data[0] >> RTJB.rightSwitch.rawBit) & 1;
+    result[RTJB.unlockDoors.joystickBit] = (data[0] >> RTJB.unlockDoors.rawBit) & 1;
+    result[RTJB.lockDoors.joystickBit] = (data[0] >> RTJB.lockDoors.rawBit) & 1;
 
     return result;
 }
 
-void UniversalTramDesk::updateInTramSimMode(uint16_t &value) {
-    uint8_t actualValueTmp = 1;
-
+void UniversalTramDesk::updateInTramSimMode(std::bitset<16> &value) {
     if (~(data[0] >> RTJB.leftIndicator.rawBit) & 1 && ~(data[0] >> RTJB.rightIndicator.rawBit) & 1) {
-        actualValueTmp = 1;
-        updateValueByTime(actualValueTmp, RTJB.disableIndicator);
-        value += actualValueTmp;
+        value[RTJB.disableIndicator.joystickBit] = true;
     } else {
-        actualValueTmp = 0;
-        updateValueByTime(actualValueTmp, RTJB.disableIndicator);
+        value[RTJB.disableIndicator.joystickBit] = false;
     }
 
     if (~(data[0] >> RTJB.leftSwitch.rawBit) & 1 && ~(data[0] >> RTJB.rightSwitch.rawBit) & 1) {
-        actualValueTmp = 1;
-        updateValueByTime(actualValueTmp, RTJB.disableSwitch);
-        value += actualValueTmp;
+        value[RTJB.disableSwitch.joystickBit] = true;
     } else {
-        actualValueTmp = 0;
-        updateValueByTime(actualValueTmp, RTJB.disableSwitch);
+        value[RTJB.disableSwitch.joystickBit] = false;
     }
 }
 
-void UniversalTramDesk::updateInCTSTramMode(uint16_t &value) {
-    uint8_t actualValueTmp = 1;
-
+void UniversalTramDesk::updateInCTSTramMode(std::bitset<16> &value) {
     if (~(data[0] >> RTJB.leftIndicator.rawBit) & 1 && ~(data[0] >> RTJB.rightIndicator.rawBit) & 1 && lastIndicator != Disabled) {
-        actualValueTmp = 1;
         if (lastIndicator == Left) {
-            updateValueByTime(actualValueTmp, RTJB.rightIndicator);
+            value[RTJB.rightIndicator.joystickBit] = updateValueByTime(true, RTJB.rightIndicator);
         } else {
-            updateValueByTime(actualValueTmp, RTJB.leftIndicator);
+            value[RTJB.leftIndicator.joystickBit] = updateValueByTime(true, RTJB.leftIndicator);
         }
+    } else {
+        value[RTJB.leftIndicator.joystickBit] = updateValueByTime(value[RTJB.leftIndicator.joystickBit], RTJB.leftIndicator);
+        value[RTJB.rightIndicator.joystickBit] = updateValueByTime(value[RTJB.rightIndicator.joystickBit], RTJB.rightIndicator);
     }
 
     if (~(data[0] >> RTJB.leftSwitch.rawBit) & 1 && ~(data[0] >> RTJB.rightSwitch.rawBit) & 1 && lastSwitch != Disabled) {
-        actualValueTmp = 1;
         if (lastSwitch == Left) {
-            updateValueByTime(actualValueTmp, RTJB.rightSwitch);
+            value[RTJB.rightSwitch.joystickBit] = updateValueByTime(true, RTJB.rightSwitch);
         } else {
-            updateValueByTime(actualValueTmp, RTJB.leftSwitch);
+            value[RTJB.leftSwitch.joystickBit] = updateValueByTime(true, RTJB.leftSwitch);
         }
-        value += actualValueTmp;
+    } else {
+        value[RTJB.leftSwitch.joystickBit] = updateValueByTime(value.test(RTJB.leftSwitch.joystickBit), RTJB.leftSwitch);
+        value[RTJB.rightSwitch.joystickBit] = updateValueByTime(value.test(RTJB.rightSwitch.joystickBit), RTJB.rightSwitch);
     }
 
-    if (data[0] >> RTJB.leftIndicator.rawBit) {
+    if (data[0] >> RTJB.leftIndicator.rawBit & 1) {
         lastIndicator = Left;
-    } else if (data[0] >> RTJB.rightIndicator.rawBit) {
+    } else if (data[0] >> RTJB.rightIndicator.rawBit & 1) {
         lastIndicator = Right;
     } else {
         lastIndicator = Disabled;
     }
 
-    if (data[0] >> RTJB.leftSwitch.rawBit) {
+    if (data[0] >> RTJB.leftSwitch.rawBit & 1) {
         lastSwitch = Left;
-    } else if (data[0] >> RTJB.rightSwitch.rawBit) {
+    } else if (data[0] >> RTJB.rightSwitch.rawBit & 1) {
         lastSwitch = Right;
     } else {
         lastSwitch = Disabled;
@@ -107,9 +90,6 @@ void UniversalTramDesk::updateMode() {
     if (mode.has_value()) {
         deskMode = mode.value();
 
-        if (deskMode == UDM::Error) {
-            deskMode = UDM::Raw;
-        }
     } else {
         deskMode = UDM::Raw;
     }
@@ -145,7 +125,7 @@ bool UniversalTramDesk::communicate(const uint8_t *toDevice) {
     data[0] = ~data[0];
 
     if (!flgIsInTestMode) {
-        now = get_absolute_time();
+        now = to_ms_since_boot(get_absolute_time());
         auto newData = updateRawToJoystickBits();
 
         if (deskMode == UDM::TramSim) {
@@ -159,7 +139,8 @@ bool UniversalTramDesk::communicate(const uint8_t *toDevice) {
         previousData = newData;
         previousRaw = data[0];
 
-        *reinterpret_cast<uint16_t*>(data[0]) = newData;
+        data[0] = newData.to_ulong() & 0xFF;
+        data[1] = (newData.to_ulong() >> 8) & 0xFF;
     }
 
     return true;

@@ -40,7 +40,7 @@ void GamePadMode::getDataFromTramDashboard() {
         }
 
         auto *tramData = moduleUniversalTramDesk.getDataFromDevice();
-        inputStates->buttons = (inputStates->buttons & 0b0000'0000'0000'0001) | ((tramData[0] << 1) & 0b0000'0001'1111'1110);
+        inputStates->buttons = (inputStates->buttons & 0b0000'0000'0000'0001) | ((static_cast<uint16_t>(tramData[0]) << 1) & 0b0000'0001'1111'1110);
 
     } else {
         if (flgTryToInitialize) {

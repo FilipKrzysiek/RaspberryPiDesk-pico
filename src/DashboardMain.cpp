@@ -3,6 +3,7 @@
 //
 
 #include "DashboardMain.h"
+#include "hardware/i2c.h"
 
 int64_t DashboardMain::buzzerStop(alarm_id_t id, void *user_data) {
     gpio_put(GP_BUZZER, false);
